@@ -15,6 +15,7 @@ import com.konecta.internship.Restaurant_POS_System.orders.entity.Order;
 import com.konecta.internship.Restaurant_POS_System.orders.entity.OrderItem;
 import com.konecta.internship.Restaurant_POS_System.orders.enums.OrderItemStatus;
 import com.konecta.internship.Restaurant_POS_System.orders.enums.OrderStatus;
+import com.konecta.internship.Restaurant_POS_System.orders.exceptions.OrderNotFoundException;
 import com.konecta.internship.Restaurant_POS_System.orders.repositories.OrderRepository;
 
 @Service
@@ -24,6 +25,11 @@ public class OrderService {
 
   public List<Order> getAllOrders() {
     return orderRepository.findAll();
+  }
+
+  public Order getOrderById(Long id) {
+    return orderRepository.findById(id)
+        .orElseThrow(() -> new OrderNotFoundException("Order with ID " + id + " not found."));
   }
 
   public Order createOrder(OrderRequestDTO dto) {
