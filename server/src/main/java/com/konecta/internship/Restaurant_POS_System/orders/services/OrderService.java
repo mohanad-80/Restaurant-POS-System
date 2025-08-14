@@ -73,4 +73,8 @@ public class OrderService {
   private BigDecimal calculateTax(BigDecimal total) {
     return total.multiply(BigDecimal.valueOf(0.14)); // 14%
   }
+
+  public void deleteOrderById(Long id) {
+    orderRepository.deleteById(id);
+  }
 }
