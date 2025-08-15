@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.konecta.internship.Restaurant_POS_System.orders.dto.DeleteOrderItemResponse;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.DeleteOrderResponse;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderItemDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderRequestDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.UpdateOrderDTO;
+import com.konecta.internship.Restaurant_POS_System.orders.dto.UpdateOrderItemDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.entity.Order;
+import com.konecta.internship.Restaurant_POS_System.orders.entity.OrderItem;
 import com.konecta.internship.Restaurant_POS_System.orders.services.OrderService;
 
 import jakarta.validation.Valid;
@@ -54,7 +57,20 @@ public class OrderController {
   }
 
   @PostMapping("/{id}/items")
-  public Order addOrderItemToOrder(@PathVariable Long id, @Valid @RequestBody OrderItemDTO itemDto){
+  public Order addOrderItemToOrder(@PathVariable Long id, @Valid @RequestBody OrderItemDTO itemDto) {
     return orderService.addOrderItemToOrder(id, itemDto);
   }
+
+  @PatchMapping("/items/{itemId}")
+  public OrderItem updateOrderItemForAnOrder(@PathVariable Long itemId,
+      @Valid @RequestBody UpdateOrderItemDTO itemDto) {
+    return orderService.updateOrderItem(itemId, itemDto);
+  }
+
+  @DeleteMapping("/items/{itemId}")
+  public DeleteOrderItemResponse deleteOrderItem(@PathVariable Long itemId) {
+    orderService.deleteOrderItem(itemId);
+    return new DeleteOrderItemResponse("Order with id " + itemId + " has been deleted successfully!");
+  }
+
 }

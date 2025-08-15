@@ -12,17 +12,22 @@ import org.springframework.stereotype.Service;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderItemDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderRequestDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.UpdateOrderDTO;
+import com.konecta.internship.Restaurant_POS_System.orders.dto.UpdateOrderItemDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.entity.Order;
 import com.konecta.internship.Restaurant_POS_System.orders.entity.OrderItem;
 import com.konecta.internship.Restaurant_POS_System.orders.enums.OrderItemStatus;
 import com.konecta.internship.Restaurant_POS_System.orders.enums.OrderStatus;
+import com.konecta.internship.Restaurant_POS_System.orders.exceptions.OrderItemNotFoundException;
 import com.konecta.internship.Restaurant_POS_System.orders.exceptions.OrderNotFoundException;
+import com.konecta.internship.Restaurant_POS_System.orders.repositories.OrderItemRepository;
 import com.konecta.internship.Restaurant_POS_System.orders.repositories.OrderRepository;
 
 @Service
 public class OrderService {
   @Autowired
   private OrderRepository orderRepository;
+  @Autowired
+  private OrderItemRepository orderItemRepository;
 
   public List<Order> getAllOrders() {
     return orderRepository.findAll();
@@ -121,5 +126,61 @@ public class OrderService {
     order.setTaxAmount(calculateTax(total));
 
     return orderRepository.save(order);
+  }
+
+  public OrderItem updateOrderItem(Long id, UpdateOrderItemDTO dto) {
+    OrderItem item = orderItemRepository.findById(id)
+        .orElseThrow(() -> new OrderItemNotFoundException(
+            "Order item with ID " + id + " not found."));
+
+    // Case 1: quantity change (with or without notes)
+    if (dto.getQuantity() != null) {
+      item.setQuantity(dto.getQuantity());
+
+      BigDecimal unitPrice = item.getUnitPrice();
+      item.setTotalPrice(unitPrice.multiply(BigDecimal.valueOf(dto.getQuantity())));
+
+      Order order = item.getOrder();
+      BigDecimal newOrderTotal = order.getItems().stream()
+          .map(OrderItem::getTotalPrice)
+          .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+      order.setTotalAmount(newOrderTotal);
+      order.setTaxAmount(calculateTax(newOrderTotal));
+
+      if (dto.getNotes() != null) {
+        item.setNotes(dto.getNotes());
+      }
+
+      orderRepository.save(order);
+    } else if (dto.getNotes() != null) {
+      // Case 2: only notes changed
+      item.setNotes(dto.getNotes());
+      orderItemRepository.save(item);
+    }
+
+    return item;
+  }
+
+  public void deleteOrderItem(Long itemId) {
+    OrderItem item = orderItemRepository.findById(itemId).orElse(null);
+    if (item == null) {
+      return;
+    }
+
+    Order order = item.getOrder();
+
+    order.getItems().remove(item);
+
+    BigDecimal newOrderTotal = order.getItems().stream()
+        .map(OrderItem::getTotalPrice)
+        .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+    order.setTotalAmount(newOrderTotal);
+    order.setTaxAmount(calculateTax(newOrderTotal));
+
+    orderItemRepository.delete(item);
+
+    orderRepository.save(order);
   }
 }
