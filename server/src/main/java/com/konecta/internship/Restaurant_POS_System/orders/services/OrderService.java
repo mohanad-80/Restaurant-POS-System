@@ -94,4 +94,32 @@ public class OrderService {
   public void deleteOrderById(Long id) {
     orderRepository.deleteById(id);
   }
+
+  public Order addOrderItemToOrder(Long id, OrderItemDTO dto) {
+    Order order = this.getOrderById(id);
+    List<OrderItem> items = order.getItems();
+    BigDecimal total = order.getTotalAmount();
+
+    OrderItem item = new OrderItem();
+    item.setOrder(order);
+    item.setMenuItemId(dto.getMenuItemId());
+    item.setQuantity(dto.getQuantity());
+
+    // Need menu service to fetch the menu item price from the db
+    // BigDecimal unitPrice = menuService.getMenuItemPrice(itemDto.getMenuItemId());
+    BigDecimal unitPrice = BigDecimal.ONE; // placeholder
+    item.setUnitPrice(unitPrice);
+    item.setTotalPrice(unitPrice.multiply(BigDecimal.valueOf(dto.getQuantity())));
+    item.setStatus(OrderItemStatus.PENDING);
+    item.setNotes(dto.getNotes());
+
+    total = total.add(item.getTotalPrice());
+    items.add(item);
+
+    order.setItems(items);
+    order.setTotalAmount(total);
+    order.setTaxAmount(calculateTax(total));
+
+    return orderRepository.save(order);
+  }
 }

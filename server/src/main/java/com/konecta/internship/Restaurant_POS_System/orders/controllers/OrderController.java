@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.konecta.internship.Restaurant_POS_System.orders.dto.DeleteOrderResponse;
+import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderItemDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderRequestDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.UpdateOrderDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.entity.Order;
@@ -50,5 +51,10 @@ public class OrderController {
   public DeleteOrderResponse deleteOrder(@PathVariable Long id) {
     orderService.deleteOrderById(id);
     return new DeleteOrderResponse("Order with id " + id + " has been deleted successfully!");
+  }
+
+  @PostMapping("/{id}/items")
+  public Order addOrderItemToOrder(@PathVariable Long id, @Valid @RequestBody OrderItemDTO itemDto){
+    return orderService.addOrderItemToOrder(id, itemDto);
   }
 }
