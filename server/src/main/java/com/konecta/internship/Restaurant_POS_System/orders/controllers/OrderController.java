@@ -7,12 +7,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.konecta.internship.Restaurant_POS_System.orders.dto.DeleteOrderResponse;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderRequestDTO;
+import com.konecta.internship.Restaurant_POS_System.orders.dto.UpdateOrderDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.entity.Order;
 import com.konecta.internship.Restaurant_POS_System.orders.services.OrderService;
 
@@ -37,6 +39,11 @@ public class OrderController {
   @PostMapping
   public Order createOrder(@Valid @RequestBody OrderRequestDTO orderRequest) {
     return orderService.createOrder(orderRequest);
+  }
+
+  @PutMapping("/{id}")
+  public Order updateOrder(@PathVariable Long id, @Valid @RequestBody UpdateOrderDTO updateOrder) {
+    return orderService.updateOrder(id, updateOrder);
   }
 
   @DeleteMapping("/{id}")

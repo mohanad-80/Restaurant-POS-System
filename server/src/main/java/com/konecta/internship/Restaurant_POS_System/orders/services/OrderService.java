@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderItemDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderRequestDTO;
+import com.konecta.internship.Restaurant_POS_System.orders.dto.UpdateOrderDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.entity.Order;
 import com.konecta.internship.Restaurant_POS_System.orders.entity.OrderItem;
 import com.konecta.internship.Restaurant_POS_System.orders.enums.OrderItemStatus;
@@ -72,6 +73,22 @@ public class OrderService {
 
   private BigDecimal calculateTax(BigDecimal total) {
     return total.multiply(BigDecimal.valueOf(0.14)); // 14%
+  }
+
+  public Order updateOrder(Long id, UpdateOrderDTO dto) {
+    Order order = this.getOrderById(id);
+
+    if (dto.getTableId() != null) {
+      order.setTableId(dto.getTableId());
+    }
+    if (dto.getDiscount() != null) {
+      order.setDiscount(dto.getDiscount());
+    }
+    if (dto.getStatus() != null) {
+      order.setStatus(dto.getStatus());
+    }
+
+    return orderRepository.save(order);
   }
 
   public void deleteOrderById(Long id) {
