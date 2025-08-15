@@ -20,7 +20,9 @@ public class DiningTable {
     private String tableNumber;
     @Column(name = "seats", nullable = false)
     private int seats;
+    @Column(name = "section")
+    private String section;
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private TableStatus status = TableStatus.AVAILABLE;
 }
