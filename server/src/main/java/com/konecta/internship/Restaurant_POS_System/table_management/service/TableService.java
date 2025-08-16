@@ -9,7 +9,6 @@ import com.konecta.internship.Restaurant_POS_System.table_management.entity.Dini
 import com.konecta.internship.Restaurant_POS_System.table_management.exception.InvalidStatusException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -74,7 +73,7 @@ public class TableService {
         try {
             status = TableStatus.valueOf(statusParam.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new InvalidStatusException("must be in (AVAILABLE, OCCUPIED, RESERVED or OUT_OF_SERVICE)");
+            throw new InvalidStatusException("must be in (AVAILABLE, OCCUPIED, RESERVED, OUT_OF_SERVICE)");
         }
         return tableRepository.findByStatus(status)
                 .stream()
@@ -82,7 +81,7 @@ public class TableService {
                 .toList();
     }
 
-    public TableResponseDto updateTableStatus(Long id, @Valid TableStatusUpdateDto statusDto) {
+    public TableResponseDto updateTableStatus(Long id, TableStatusUpdateDto statusDto) {
         DiningTable table = tableRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No table is found with id: " + id));
         String status = statusDto.getStatus();

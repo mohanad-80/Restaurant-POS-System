@@ -75,7 +75,7 @@ public class TableController {
         errors.put("status", e.getMessage());
         ErrorDto error = new ErrorDto("Invalid Table Status");
         error.setErrors(errors);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     // Table is not found exception handler
