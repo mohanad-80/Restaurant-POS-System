@@ -1,5 +1,6 @@
 package com.konecta.internship.Restaurant_POS_System.table_management.service;
 
+import com.konecta.internship.Restaurant_POS_System.table_management.dto.TableStatusUpdateDto;
 import com.konecta.internship.Restaurant_POS_System.table_management.repository.TableRepository;
 import com.konecta.internship.Restaurant_POS_System.table_management.enums.TableStatus;
 import com.konecta.internship.Restaurant_POS_System.table_management.dto.TableRequestDto;
@@ -8,6 +9,7 @@ import com.konecta.internship.Restaurant_POS_System.table_management.entity.Dini
 import com.konecta.internship.Restaurant_POS_System.table_management.exception.InvalidStatusException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,6 +48,12 @@ public class TableService {
         return saveTable(dto, table);
     }
 
+    public TableResponseDto fetchTableById(Long id) {
+        DiningTable table = tableRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No table is found with id: " + id));
+        return new TableResponseDto(table);
+    }
+
     public TableResponseDto updateExistingTable(Long id, TableRequestDto dto) {
         DiningTable table = tableRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No table is found with id: " + id));
@@ -72,5 +80,15 @@ public class TableService {
                 .stream()
                 .map(TableResponseDto::new)
                 .toList();
+    }
+
+    public TableResponseDto updateTableStatus(Long id, @Valid TableStatusUpdateDto statusDto) {
+        DiningTable table = tableRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No table is found with id: " + id));
+        String status = statusDto.getStatus();
+        if(status != null)
+            table.setStatus(TableStatus.valueOf(status));
+        tableRepository.save(table);
+        return new TableResponseDto(table);
     }
 }

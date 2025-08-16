@@ -1,5 +1,6 @@
 package com.konecta.internship.Restaurant_POS_System.table_management.controller;
 
+import com.konecta.internship.Restaurant_POS_System.table_management.dto.TableStatusUpdateDto;
 import com.konecta.internship.Restaurant_POS_System.table_management.exception.InvalidStatusException;
 import com.konecta.internship.Restaurant_POS_System.table_management.service.TableService;
 import com.konecta.internship.Restaurant_POS_System.table_management.dto.ErrorDto;
@@ -41,6 +42,13 @@ public class TableController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<TableResponseDto> getTable(@PathVariable Long id) {
+        TableResponseDto response = tableService.fetchTableById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+
     @PutMapping("/{id}")
     public ResponseEntity<TableResponseDto> editTable(@PathVariable Long id, @Valid @RequestBody TableRequestDto requestDto) {
         TableResponseDto response = tableService.updateExistingTable(id, requestDto);
@@ -51,6 +59,13 @@ public class TableController {
     public ResponseEntity<Void> removeTable(@PathVariable Long id) {
         tableService.deleteTable(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<TableResponseDto> editTableStatus(
+            @PathVariable Long id, @Valid @RequestBody TableStatusUpdateDto statusDto) {
+        TableResponseDto response = tableService.updateTableStatus(id, statusDto);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     // Invalid status request param handler
