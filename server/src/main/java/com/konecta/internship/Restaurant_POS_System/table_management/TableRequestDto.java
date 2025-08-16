@@ -14,7 +14,7 @@ public class TableRequestDto {
     private String tableNumber;
     @NotNull
     @Min(value = 1)
-    private int seats;
+    private Integer seats;
     private String section;
     @Pattern(
             regexp = "AVAILABLE|OCCUPIED|RESERVED|OUT_OF_SERVICE",

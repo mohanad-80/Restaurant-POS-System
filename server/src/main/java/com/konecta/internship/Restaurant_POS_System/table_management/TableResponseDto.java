@@ -5,7 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-
 public class TableResponseDto {
     private Long id;
     private String tableNumber;
