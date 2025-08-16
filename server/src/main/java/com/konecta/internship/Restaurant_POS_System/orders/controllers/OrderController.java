@@ -2,7 +2,8 @@ package com.konecta.internship.Restaurant_POS_System.orders.controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -12,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.konecta.internship.Restaurant_POS_System.orders.dto.DeleteOrderItemResponse;
-import com.konecta.internship.Restaurant_POS_System.orders.dto.DeleteOrderResponse;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderItemDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderRequestDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.UpdateOrderDTO;
@@ -25,52 +24,56 @@ import com.konecta.internship.Restaurant_POS_System.orders.services.OrderService
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/orders")
 public class OrderController {
-  @Autowired
-  private OrderService orderService;
+
+  private final OrderService orderService;
+
+  public OrderController(OrderService orderService) {
+    this.orderService = orderService;
+  }
 
   @GetMapping
-  public List<Order> getAllOrders() {
-    return orderService.getAllOrders();
+  public ResponseEntity<List<Order>> getAllOrders() {
+    return ResponseEntity.ok(orderService.getAllOrders());
   }
 
   @GetMapping("/{id}")
-  public Order getOrder(@PathVariable Long id) {
-    return orderService.getOrderById(id);
+  public ResponseEntity<Order> getOrder(@PathVariable Long id) {
+    return ResponseEntity.ok(orderService.getOrderById(id));
   }
 
   @PostMapping
-  public Order createOrder(@Valid @RequestBody OrderRequestDTO orderRequest) {
-    return orderService.createOrder(orderRequest);
+  public ResponseEntity<Order> createOrder(@Valid @RequestBody OrderRequestDTO orderRequest) {
+    Order createdOrder = orderService.createOrder(orderRequest);
+    return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
   }
 
   @PatchMapping("/{id}")
-  public Order updateOrder(@PathVariable Long id, @Valid @RequestBody UpdateOrderDTO updateOrder) {
-    return orderService.updateOrder(id, updateOrder);
+  public ResponseEntity<Order> updateOrder(@PathVariable Long id, @Valid @RequestBody UpdateOrderDTO updateOrder) {
+    return ResponseEntity.ok(orderService.updateOrder(id, updateOrder));
   }
 
   @DeleteMapping("/{id}")
-  public DeleteOrderResponse deleteOrder(@PathVariable Long id) {
+  public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
     orderService.deleteOrderById(id);
-    return new DeleteOrderResponse("Order with id " + id + " has been deleted successfully!");
+    return ResponseEntity.noContent().build();
   }
 
   @PostMapping("/{id}/items")
-  public Order addOrderItemToOrder(@PathVariable Long id, @Valid @RequestBody OrderItemDTO itemDto) {
-    return orderService.addOrderItemToOrder(id, itemDto);
+  public ResponseEntity<Order> addOrderItemToOrder(@PathVariable Long id, @Valid @RequestBody OrderItemDTO itemDto) {
+    return ResponseEntity.status(HttpStatus.CREATED).body(orderService.addOrderItemToOrder(id, itemDto));
   }
 
   @PatchMapping("/items/{itemId}")
-  public OrderItem updateOrderItemForAnOrder(@PathVariable Long itemId,
+  public ResponseEntity<OrderItem> updateOrderItemForAnOrder(@PathVariable Long itemId,
       @Valid @RequestBody UpdateOrderItemDTO itemDto) {
-    return orderService.updateOrderItem(itemId, itemDto);
+    return ResponseEntity.ok(orderService.updateOrderItem(itemId, itemDto));
   }
 
   @DeleteMapping("/items/{itemId}")
-  public DeleteOrderItemResponse deleteOrderItem(@PathVariable Long itemId) {
+  public ResponseEntity<Void> deleteOrderItem(@PathVariable Long itemId) {
     orderService.deleteOrderItem(itemId);
-    return new DeleteOrderItemResponse("Order with id " + itemId + " has been deleted successfully!");
+    return ResponseEntity.noContent().build();
   }
-
 }
