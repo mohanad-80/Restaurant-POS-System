@@ -1,0 +1,112 @@
+package com.konecta.internship.Restaurant_POS_System.table_management.controller;
+
+import com.konecta.internship.Restaurant_POS_System.table_management.dto.TableStatusUpdateDto;
+import com.konecta.internship.Restaurant_POS_System.table_management.exception.InvalidStatusException;
+import com.konecta.internship.Restaurant_POS_System.table_management.service.TableService;
+import com.konecta.internship.Restaurant_POS_System.table_management.dto.ErrorDto;
+import com.konecta.internship.Restaurant_POS_System.table_management.dto.TableRequestDto;
+import com.konecta.internship.Restaurant_POS_System.table_management.dto.TableResponseDto;
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("api/tables")
+public class TableController {
+    private final TableService tableService;
+
+    public TableController(TableService tableService) {
+        this.tableService = tableService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TableResponseDto>> getTables(@RequestParam(required = false) String status) {
+        List<TableResponseDto> dtos = (status != null)
+                ? tableService.filterTablesByStatus(status)
+                : tableService.fetchAllTables();
+
+        return ResponseEntity.ok(dtos);
+    }
+
+    @PostMapping
+    public ResponseEntity<TableResponseDto> addTable(@Valid @RequestBody TableRequestDto requestDto) {
+        TableResponseDto response = tableService.createNewTable(requestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TableResponseDto> getTable(@PathVariable Long id) {
+        TableResponseDto response = tableService.fetchTableById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TableResponseDto> editTable(@PathVariable Long id, @Valid @RequestBody TableRequestDto requestDto) {
+        TableResponseDto response = tableService.updateExistingTable(id, requestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> removeTable(@PathVariable Long id) {
+        tableService.deleteTable(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<TableResponseDto> editTableStatus(
+            @PathVariable Long id, @Valid @RequestBody TableStatusUpdateDto statusDto) {
+        TableResponseDto response = tableService.updateTableStatus(id, statusDto);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    // Invalid status request param handler
+    @ExceptionHandler(InvalidStatusException.class)
+    public ResponseEntity<ErrorDto> invalidStatusHandler(InvalidStatusException e) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("status", e.getMessage());
+        ErrorDto error = new ErrorDto("Invalid Table Status");
+        error.setErrors(errors);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    // Table is not found exception handler
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorDto> entityNotFoundHandler(EntityNotFoundException e) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("id", e.getMessage());
+        ErrorDto error = new ErrorDto("Table Not Found");
+        error.setErrors(errors);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    // Table already exists exception handler
+    @ExceptionHandler(EntityExistsException.class)
+    public ResponseEntity<ErrorDto> entityAlreadyExistsHandler(EntityExistsException e) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("tableNumber", e.getMessage());
+        ErrorDto error = new ErrorDto("Table Already Exists");
+        error.setErrors(errors);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    // Request validation exceptions handler
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorDto> methodArgumentNotValidHandler(MethodArgumentNotValidException e) {
+        Map<String, String> errors = new HashMap<>();
+        e.getBindingResult().getFieldErrors().forEach(
+                error -> errors.put(error.getField(), error.getDefaultMessage())
+        );
+        ErrorDto error = new ErrorDto("Invalid Request Content");
+        error.setErrors(errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+}
