@@ -33,7 +33,7 @@ public class CategoryService
         boolean isExcist=categoryRepository.findById(id).isPresent();
         if(!isExcist)
         {
-            throw new IllegalAccessError("OOPS...This category not found");
+            throw new IllegalArgumentException("OOPS...This category not found");
         }
         else
         {
