@@ -1,11 +1,15 @@
 package com.konecta.internship.Restaurant_POS_System.Inventory;
 
 import java.math.BigDecimal;
+import java.util.List;
+
+import com.konecta.internship.Restaurant_POS_System.MenuItem.MenuItemEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -31,5 +35,8 @@ public class InventoryEntity
     private BigDecimal  available_units;
 
     private String unit;
+
+    @ManyToMany(mappedBy = "ingredients")
+    private List<MenuItemEntity> menuItems;
 
 }

@@ -60,4 +60,19 @@ public class InventoryService
             }
         }
     }
+
+    public void deductStock(Long inventoryId, int quantity) 
+    {
+        InventoryEntity inventory = inventoryRepository.findById(inventoryId).orElseThrow(() -> new RuntimeException("Inventory not found: " + inventoryId));
+
+        BigDecimal newStock = inventory.getAvailable_units().subtract(BigDecimal.valueOf(quantity));
+
+        if (newStock.compareTo(BigDecimal.ZERO) < 0) 
+        {
+            throw new RuntimeException("Not enough stock for " + inventory.getName());
+        }
+
+        inventory.setAvailable_units(newStock);
+        inventoryRepository.save(inventory);
+    }
 }
