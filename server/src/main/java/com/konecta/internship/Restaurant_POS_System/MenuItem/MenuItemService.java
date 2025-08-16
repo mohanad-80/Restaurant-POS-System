@@ -30,26 +30,47 @@ public class MenuItemService {
     @Autowired
     private FileStorageService fileStorageService;
 
-    public List<MenuItemEntity> getMenuItmes() {
-        return repository.findAll();
+    public List<MenuItemEntity> getMenuItems(Long categoryId, String status) 
+    {
+        MenuItemEntity.Status statusEnum = null;
+        if (status != null) 
+        {
+            statusEnum = MenuItemEntity.Status.valueOf(status.toUpperCase());
+        }
+        if (categoryId != null && statusEnum != null) 
+        {
+            return repository.findByCategoryIdAndStatus(categoryId, statusEnum);
+        } 
+        else if (categoryId != null) 
+        {
+            return repository.findByCategoryId(categoryId);
+        } 
+        else if (statusEnum != null) 
+        {
+            return repository.findByStatus(statusEnum);
+        } 
+        else 
+        {
+            return repository.findAll();
+        }
     }
 
     public MenuItemEntity addMenuItem(MenuItemEntity menuItem) {
         return repository.save(menuItem);
     }
 
-    public MenuItemEntity updateMenuItem(int id, Map<String, String> updates) {
-        MenuItemEntity item = repository.findById(id).orElseThrow();
+    public MenuItemEntity updateMenuItem(Long id, Map<String, String> updates) {
+        MenuItemEntity item = repository.findById(id).orElseThrow(()-> new java.util.NoSuchElementException("Menu item with id " + id + " not found"));
         updates.forEach((field, value) -> {
             switch (field) {
                 case "name":
                     item.setName(value);
                     break;
                 case "price":
-                    item.setPrice(Double.parseDouble(value));
+                    item.setPrice(new BigDecimal(value));
                     break;
-                case "preperation_time":
-                    item.setPreperation_time(Integer.parseInt(value));
+                case "preparation_time":
+                    item.setPreparation_time(Integer.parseInt(value));
                     break;
                 case "status":
                     item.setStatus(MenuItemEntity.Status.valueOf(value.toUpperCase()));
@@ -65,7 +86,7 @@ public class MenuItemService {
                     }
                     break;
                 case "category_id":
-                    CategoryEntity category = categoryRepository.findById(Integer.parseInt(value)).orElseThrow();
+                    CategoryEntity category = categoryRepository.findById(Long.parseLong(value)).orElseThrow(() -> new java.util.NoSuchElementException("Category with id " + value + " not found"));
                     item.setCategory(category);
                     break;
                 default:
@@ -76,7 +97,7 @@ public class MenuItemService {
         return repository.save(item);
     }
 
-    public void deleteMenuItem(int id) {
+    public void deleteMenuItem(Long id) {
         boolean isExcist = repository.findById(id).isPresent();
         if (!isExcist) {
             throw new java.util.NoSuchElementException("OOPS...This item not found");
@@ -85,10 +106,10 @@ public class MenuItemService {
         }
     }
 
-    public ResponseEntity<String> uploadImage(int id, MultipartFile image) 
+    public ResponseEntity<String> uploadImage(Long id, MultipartFile image) 
     {
         try {
-            MenuItemEntity item = repository.findById(id).orElseThrow();
+            MenuItemEntity item = repository.findById(id).orElseThrow(()-> new java.util.NoSuchElementException("Menu item with id " + id + " not found"));
 
             if (item.getImage_path() != null) {
                 Path oldFilePath = Paths.get(item.getImage_path().replaceFirst("^/", ""));
@@ -110,10 +131,10 @@ public class MenuItemService {
 
     }
     
-    public BigDecimal getMenuItemPrice(int id)
+    public BigDecimal getMenuItemPrice(Long id)
     {
         MenuItemEntity item= repository.findById(id).orElseThrow();
-        return BigDecimal.valueOf(item.getPrice());
+        return item.getPrice();
 
     }
 }

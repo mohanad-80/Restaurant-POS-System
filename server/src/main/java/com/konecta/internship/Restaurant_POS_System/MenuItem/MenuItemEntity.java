@@ -1,5 +1,6 @@
 package com.konecta.internship.Restaurant_POS_System.MenuItem;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.konecta.internship.Restaurant_POS_System.Category.CategoryEntity;
@@ -31,7 +32,7 @@ public class MenuItemEntity
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @NotBlank
     private String name;
@@ -42,9 +43,9 @@ public class MenuItemEntity
     
     @NotNull
     @DecimalMin("0.01")
-    private double price;
+    private BigDecimal price;
     
-    private int preperation_time;
+    private int preparation_time;
     private String image_path;
     
     @Enumerated(EnumType.STRING)

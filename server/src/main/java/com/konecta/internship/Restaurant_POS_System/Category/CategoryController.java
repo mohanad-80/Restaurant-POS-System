@@ -13,32 +13,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/Categories")
+@RequestMapping("/api/v1/categories")
 public class CategoryController 
 {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping("/all")
+    @GetMapping
     public List<CategoryEntity> getCategories()
     {
         return categoryService.getCategories();
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public CategoryEntity addCategory(@RequestBody CategoryEntity category) 
     {    
         return categoryService.addCategory(category);
     }
 
-    @PutMapping("/update-{id}")
-    public CategoryEntity updateCategory(@PathVariable int id, @RequestBody CategoryEntity category) 
+    @PutMapping("/{id}")
+    public CategoryEntity updateCategory(@PathVariable Long id, @RequestBody CategoryEntity category) 
     {
         return categoryService.updateCategory(id, category);
     }
 
-    @DeleteMapping("/delete-{id}")
-    public void deleteCategory(@PathVariable int id)
+    @DeleteMapping("/{id}")
+    public void deleteCategory(@PathVariable Long id)
     {
         categoryService.deleteCategory(id);
     }

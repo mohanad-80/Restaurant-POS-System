@@ -22,7 +22,7 @@ public class CategoryEntity
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @NotBlank
     private String name;

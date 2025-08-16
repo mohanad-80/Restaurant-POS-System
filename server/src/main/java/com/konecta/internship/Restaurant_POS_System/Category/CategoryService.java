@@ -21,20 +21,20 @@ public class CategoryService
         return categoryRepository.save(category);
     }
 
-    public CategoryEntity updateCategory(int id,CategoryEntity category)
+    public CategoryEntity updateCategory(Long id,CategoryEntity category)
     {
-        CategoryEntity categ= categoryRepository.findById(id).orElseThrow();
+        CategoryEntity categ= categoryRepository.findById(id).orElseThrow(() -> new java.util.NoSuchElementException("Category with id " + id + " not found"));
         categ.setName(category.getName());
         categoryRepository.save(categ);
         return categ;
     }
 
-    public void deleteCategory(int id)
+    public void deleteCategory(Long id)
     {
         boolean isExcist=categoryRepository.findById(id).isPresent();
         if(!isExcist)
         {
-            throw new IllegalArgumentException("OOPS...This category not found");
+            throw new java.util.NoSuchElementException("Category with id " + id + " not found");
         }
         else
         {
