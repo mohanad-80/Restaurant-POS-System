@@ -301,7 +301,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       orderItem.innerHTML = `
                 <img src="${
-                  item.image.thumbnail
+                  item.image
                 }" alt="order item thumbnail" class="order-item-thumbnail">
                 <div class="order-item-details">
                     <h5 class="order-item-name">${item.name}</h5>
