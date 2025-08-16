@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.konecta.internship.Restaurant_POS_System.orders.dto.DeleteOrderItemResponse;
-import com.konecta.internship.Restaurant_POS_System.orders.dto.DeleteOrderResponse;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderItemDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderRequestDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.UpdateOrderDTO;
@@ -57,9 +55,9 @@ public class OrderController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<DeleteOrderResponse> deleteOrder(@PathVariable Long id) {
+  public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
     orderService.deleteOrderById(id);
-    return ResponseEntity.ok(new DeleteOrderResponse("Order with id " + id + " has been deleted successfully!"));
+    return ResponseEntity.noContent().build();
   }
 
   @PostMapping("/{id}/items")
@@ -74,9 +72,8 @@ public class OrderController {
   }
 
   @DeleteMapping("/items/{itemId}")
-  public ResponseEntity<DeleteOrderItemResponse> deleteOrderItem(@PathVariable Long itemId) {
+  public ResponseEntity<Void> deleteOrderItem(@PathVariable Long itemId) {
     orderService.deleteOrderItem(itemId);
-    return ResponseEntity
-        .ok(new DeleteOrderItemResponse("Order item with id " + itemId + " has been deleted successfully!"));
+    return ResponseEntity.noContent().build();
   }
 }
