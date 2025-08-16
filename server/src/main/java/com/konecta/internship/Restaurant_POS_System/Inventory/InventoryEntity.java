@@ -23,7 +23,7 @@ public class InventoryEntity
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @NotBlank
     private String name;
@@ -31,7 +31,5 @@ public class InventoryEntity
     private BigDecimal  available_units;
 
     private String unit;
-
-    private BigDecimal  threshold;
 
 }
