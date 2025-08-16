@@ -34,24 +34,37 @@ public class TableService {
 
     public TableResponseDto createNewTable(TableRequestDto dto) {
         if(tableRepository.existsByTableNumber(dto.getTableNumber())){
-            throw new EntityExistsException(dto.getTableNumber());
+            throw new EntityExistsException("table (" + dto.getTableNumber() + ") already exists");
         }
         DiningTable table = new DiningTable();
         return saveTable(dto, table);
     }
 
     public TableResponseDto updateExistingTable(Long id, TableRequestDto dto) {
-        if(tableRepository.existsByTableNumber(dto.getTableNumber())){
-            throw new EntityExistsException(dto.getTableNumber());
-        }
         DiningTable table = tableRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.valueOf(id)));
+                .orElseThrow(() -> new EntityNotFoundException("No table is found with id: " + id));
+        if(!table.getTableNumber().equals(dto.getTableNumber()) && tableRepository.existsByTableNumber(dto.getTableNumber())){
+            throw new EntityExistsException("table (" + dto.getTableNumber() + ") already exists");
+        }
         return saveTable(dto, table);
     }
 
     public void deleteTable(Long id) {
         DiningTable table = tableRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.valueOf(id)));
+                .orElseThrow(() -> new EntityNotFoundException("No table is found with id: " + id));
         tableRepository.delete(table);
+    }
+
+    public List<TableResponseDto> filterTablesByStatus(String statusParam) {
+        TableStatus status;
+        try {
+            status = TableStatus.valueOf(statusParam.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new InvalidStatusException("must be in (AVAILABLE, OCCUPIED, RESERVED or OUT_OF_SERVICE)");
+        }
+        return tableRepository.findByStatus(status)
+                .stream()
+                .map(TableResponseDto::new)
+                .toList();
     }
 }

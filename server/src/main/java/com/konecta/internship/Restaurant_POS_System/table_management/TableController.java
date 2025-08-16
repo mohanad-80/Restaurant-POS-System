@@ -22,9 +22,12 @@ public class TableController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TableResponseDto>> getTables() {
-        List<TableResponseDto> dtos = tableService.fetchAllTables();
-        return ResponseEntity.status(HttpStatus.OK).body(dtos);
+    public ResponseEntity<List<TableResponseDto>> getTables(@RequestParam(required = false) String status) {
+        List<TableResponseDto> dtos = (status != null)
+                ? tableService.filterTablesByStatus(status)
+                : tableService.fetchAllTables();
+
+        return ResponseEntity.ok(dtos);
     }
 
     @PostMapping
@@ -45,11 +48,21 @@ public class TableController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
+    // Invalid status request param handler
+    @ExceptionHandler(InvalidStatusException.class)
+    public ResponseEntity<ErrorDto> invalidStatusHandler(InvalidStatusException e) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("status", e.getMessage());
+        ErrorDto error = new ErrorDto("Invalid Table Status");
+        error.setErrors(errors);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     // Table is not found exception handler
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorDto> entityNotFoundHandler(EntityNotFoundException e) {
         Map<String, String> errors = new HashMap<>();
-        errors.put("id", "No table is found with id: " + e.getMessage());
+        errors.put("id", e.getMessage());
         ErrorDto error = new ErrorDto("Table Not Found");
         error.setErrors(errors);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
@@ -59,7 +72,7 @@ public class TableController {
     @ExceptionHandler(EntityExistsException.class)
     public ResponseEntity<ErrorDto> entityAlreadyExistsHandler(EntityExistsException e) {
         Map<String, String> errors = new HashMap<>();
-        errors.put("tableNumber", "table (" + e.getMessage() + ") already exists");
+        errors.put("tableNumber", e.getMessage());
         ErrorDto error = new ErrorDto("Table Already Exists");
         error.setErrors(errors);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);

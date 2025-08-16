@@ -18,7 +18,7 @@ public class TableRequestDto {
     private String section;
     @Pattern(
             regexp = "AVAILABLE|OCCUPIED|RESERVED|OUT_OF_SERVICE",
-            message = "must match be (AVAILABLE, OCCUPIED, RESERVED or OUT_OF_SERVICE)"
+            message = "must be in (AVAILABLE, OCCUPIED, RESERVED or OUT_OF_SERVICE)"
     )
     private String status;
 }
