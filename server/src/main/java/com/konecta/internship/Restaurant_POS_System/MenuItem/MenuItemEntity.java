@@ -1,5 +1,6 @@
 package com.konecta.internship.Restaurant_POS_System.MenuItem;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.konecta.internship.Restaurant_POS_System.Category.CategoryEntity;
@@ -13,9 +14,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,29 +29,25 @@ public class MenuItemEntity
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @NotBlank
     private String name;
 
     @ManyToOne
     @JoinColumn(name="category_id")
     private CategoryEntity category;
     
-    @NotNull
-    @DecimalMin("0.01")
-    private double price;
+    private BigDecimal price;
     
-    private int preperation_time;
+    private int preparation_time;
     private String image_path;
     
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    private LocalDateTime  created_at;
+    private LocalDateTime created_at;
 
-    public enum Status 
-    {
+    public enum Status {
         AVAILABLE,
         OUT_OF_STOCK
     }
