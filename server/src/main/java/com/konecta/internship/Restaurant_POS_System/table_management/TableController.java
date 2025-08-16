@@ -39,12 +39,18 @@ public class TableController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> removeTable(@PathVariable Long id) {
+        tableService.deleteTable(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
+
     // Table is not found exception handler
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorDto> entityNotFoundHandler(EntityNotFoundException e) {
         Map<String, String> errors = new HashMap<>();
         errors.put("id", "No table is found with id: " + e.getMessage());
-        ErrorDto error = new ErrorDto("Table is not found");
+        ErrorDto error = new ErrorDto("Table Not Found");
         error.setErrors(errors);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
@@ -54,7 +60,7 @@ public class TableController {
     public ResponseEntity<ErrorDto> entityAlreadyExistsHandler(EntityExistsException e) {
         Map<String, String> errors = new HashMap<>();
         errors.put("tableNumber", "table (" + e.getMessage() + ") already exists");
-        ErrorDto error = new ErrorDto("Table already exists");
+        ErrorDto error = new ErrorDto("Table Already Exists");
         error.setErrors(errors);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
@@ -66,7 +72,7 @@ public class TableController {
         e.getBindingResult().getFieldErrors().forEach(
                 error -> errors.put(error.getField(), error.getDefaultMessage())
         );
-        ErrorDto error = new ErrorDto("Invalid request content");
+        ErrorDto error = new ErrorDto("Invalid Request Content");
         error.setErrors(errors);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }

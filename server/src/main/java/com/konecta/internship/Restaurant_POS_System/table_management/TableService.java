@@ -41,8 +41,17 @@ public class TableService {
     }
 
     public TableResponseDto updateExistingTable(Long id, TableRequestDto dto) {
+        if(tableRepository.existsByTableNumber(dto.getTableNumber())){
+            throw new EntityExistsException(dto.getTableNumber());
+        }
         DiningTable table = tableRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.valueOf(id)));
         return saveTable(dto, table);
+    }
+
+    public void deleteTable(Long id) {
+        DiningTable table = tableRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.valueOf(id)));
+        tableRepository.delete(table);
     }
 }
