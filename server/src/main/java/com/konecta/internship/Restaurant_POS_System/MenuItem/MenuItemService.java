@@ -79,7 +79,7 @@ public class MenuItemService {
     public void deleteMenuItem(int id) {
         boolean isExcist = repository.findById(id).isPresent();
         if (!isExcist) {
-            throw new IllegalAccessError("OOPS...This item not found");
+            throw new java.util.NoSuchElementException("OOPS...This item not found");
         } else {
             repository.deleteById(id);
         }
