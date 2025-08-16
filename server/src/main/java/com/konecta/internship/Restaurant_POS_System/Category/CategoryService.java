@@ -25,6 +25,7 @@ public class CategoryService
     {
         CategoryEntity categ= categoryRepository.findById(id).orElseThrow();
         categ.setName(category.getName());
+        categoryRepository.save(categ);
         return categ;
     }
 
