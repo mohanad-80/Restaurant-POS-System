@@ -16,7 +16,7 @@ public class FileStorageService
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    public String storeFile(MultipartFile file, int menuItemId) throws IOException {
+    public String storeFile(MultipartFile file, Long menuItemId) throws IOException {
         String fileName = file.getOriginalFilename();
         Path targetLocation = Paths.get(uploadDir + "/" + menuItemId + "/");
         Files.createDirectories(targetLocation);
