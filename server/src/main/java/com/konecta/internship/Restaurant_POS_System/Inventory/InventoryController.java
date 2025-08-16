@@ -30,9 +30,9 @@ public class InventoryController
     }
 
     @PostMapping
-    public InventoryEntity addInventoryItem(@RequestBody InventoryEntity item)
+    public InventoryEntity addInventoryItem(@RequestBody InventoryDTO dto)
     {
-        return inventoryService.addInventoryItem(item);
+        return inventoryService.addInventoryItem(dto);
     }
 
     @PostMapping("/import")

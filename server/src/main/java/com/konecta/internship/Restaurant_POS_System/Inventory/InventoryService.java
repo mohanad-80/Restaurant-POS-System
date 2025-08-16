@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.konecta.internship.Restaurant_POS_System.MenuItem.MenuItemEntity;
+import com.konecta.internship.Restaurant_POS_System.MenuItem.MenuItemRepository;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
@@ -19,14 +21,27 @@ public class InventoryService
     @Autowired
     private InventoryRepository inventoryRepository;
 
+    @Autowired
+    private MenuItemRepository menuItemRepository;
+
     public List<InventoryEntity> getInventory()
     {
         return inventoryRepository.findAll();
     }
 
-    public InventoryEntity addInventoryItem(InventoryEntity item)
+    public InventoryEntity addInventoryItem(InventoryDTO dto)
     {
-        return inventoryRepository.save(item);
+        InventoryEntity entity = new InventoryEntity();
+        entity.setName(dto.getName());
+        entity.setAvailable_units(dto.getAvailable_units());
+        entity.setUnit(dto.getUnit());
+
+        // if (dto.getMenuItemIds() != null) {
+        //     List<MenuItemEntity> menuItems = menuItemRepository.findAllById(dto.getMenuItemIds());
+        //     entity.setMenuItems(menuItems);
+        // }
+
+        return inventoryRepository.save(entity);
     }
 
     public void importCSV(MultipartFile file) throws Exception 
