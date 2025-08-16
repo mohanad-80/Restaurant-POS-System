@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.konecta.internship.Restaurant_POS_System.MenuItem.MenuItemService;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderItemDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderRequestDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.UpdateOrderDTO;
@@ -26,10 +27,12 @@ public class OrderService {
 
   private final OrderRepository orderRepository;
   private final OrderItemRepository orderItemRepository;
+  private final MenuItemService menuItemService;
 
-  public OrderService(OrderRepository orderRepository, OrderItemRepository orderItemRepository) {
+  public OrderService(OrderRepository orderRepository, OrderItemRepository orderItemRepository, MenuItemService menuItemService) {
     this.orderRepository = orderRepository;
     this.orderItemRepository = orderItemRepository;
+    this.menuItemService = menuItemService;
   }
 
   public List<Order> getAllOrders() {
@@ -73,9 +76,7 @@ public class OrderService {
     item.setMenuItemId(dto.getMenuItemId());
     item.setQuantity(dto.getQuantity());
 
-    // placeholder until menuService is integrated
-    // BigDecimal unitPrice = menuService.getMenuItemPrice(itemDto.getMenuItemId());
-    BigDecimal unitPrice = BigDecimal.ONE;
+    BigDecimal unitPrice = menuItemService.getMenuItemPrice(dto.getMenuItemId());
     item.setUnitPrice(unitPrice);
     item.setTotalPrice(unitPrice.multiply(BigDecimal.valueOf(dto.getQuantity())));
     item.setStatus(OrderItemStatus.PENDING);
