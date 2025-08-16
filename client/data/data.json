@@ -4,7 +4,7 @@
     "name": "Waffle with Berries",
     "category": "Waffle",
     "price": 6.50,
-    "preperation_time": 10,
+    "preparation_time": 10,
     "image": "../assets/images/image-waffle-desktop.jpg",
     "status": "AVAILABLE"
   },
@@ -13,7 +13,7 @@
     "name": "Vanilla Bean Crème Brûlée",
     "category": "Crème Brûlée",
     "price": 7.00,
-    "preperation_time": 15,
+    "preparation_time": 15,
     "image": "../assets/images/image-creme-brulee-desktop.jpg",
     "status": "OUT_OF_STOCK"
   },
@@ -22,7 +22,7 @@
     "name": "Macaron Mix of Five",
     "category": "Macaron",
     "price": 8.00,
-    "preperation_time": 5,
+    "preparation_time": 5,
     "image": "../assets/images/image-macaron-desktop.jpg",
     "status": "AVAILABLE"
   },
@@ -31,7 +31,7 @@
     "name": "Classic Tiramisu",
     "category": "Tiramisu",
     "price": 5.50,
-    "preperation_time": 12,
+    "preparation_time": 12,
     "image": "../assets/images/image-tiramisu-desktop.jpg",
     "status": "AVAILABLE"
   },
@@ -40,7 +40,7 @@
     "name": "Pistachio Baklava",
     "category": "Baklava",
     "price": 4.00,
-    "preperation_time": 8,
+    "preparation_time": 8,
     "image": "../assets/images/image-baklava-desktop.jpg",
     "status": "AVAILABLE"
   },
@@ -49,7 +49,7 @@
     "name": "Lemon Meringue Pie",
     "category": "Pie",
     "price": 5.00,
-    "preperation_time": 10,
+    "preparation_time": 10,
     "image": "../assets/images/image-meringue-desktop.jpg",
     "status": "AVAILABLE"
   },
@@ -58,7 +58,7 @@
     "name": "Red Velvet Cake",
     "category": "Cake",
     "price": 4.50,
-    "preperation_time": 10,
+    "preparation_time": 10,
     "image": "../assets/images/image-cake-desktop.jpg",
     "status": "AVAILABLE"
   },
@@ -67,7 +67,7 @@
     "name": "Salted Caramel Brownie",
     "category": "Brownie",
     "price": 4.50,
-    "preperation_time": 7,
+    "preparation_time": 7,
     "image": "../assets/images/image-brownie-desktop.jpg",
     "status": "AVAILABLE"
   },
@@ -76,7 +76,7 @@
     "name": "Vanilla Panna Cotta",
     "category": "Panna Cotta",
     "price": 6.50,
-    "preperation_time": 10,
+    "preparation_time": 10,
     "image": "../assets/images/image-panna-cotta-desktop.jpg",
     "status": "AVAILABLE"
   }

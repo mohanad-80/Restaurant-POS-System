@@ -136,7 +136,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 <h5 class="product-category">${product.category}</h5>
                 <h4 class="product-name">${product.name}</h4>
-                <p class="product-price">$${product.price.toFixed(2)}</p>
+                <p class="product-price">
+                  $${product.price.toFixed(2)}
+                  <span class="prep-time">(${
+                    product.preparation_time
+                  } min)</span>
+                </p>
             `;
 
       productsContainer.appendChild(productCard);
