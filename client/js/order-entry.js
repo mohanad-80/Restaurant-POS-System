@@ -100,9 +100,9 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       productCard.innerHTML = `
-                <img class="product-image" src="${
-                  product.image.desktop
-                }" alt="${product.name}" />
+                <img class="product-image" src="${product.image}" alt="${
+        product.name
+      }" />
                 ${
                   cartItem
                     ? `
@@ -116,13 +116,22 @@ document.addEventListener("DOMContentLoaded", function () {
                         </button>
                     </div>
                 `
-                    : `
-                    <div class="add-to-cart-btn">
-                        <button>
-                            <img src="../assets/images/icon-add-to-cart.svg" alt="add to cart icon" />
-                            <span>Add to cart</span>
-                        </button>
-                    </div>
+                    : ` ${
+                        product.status === "OUT_OF_STOCK"
+                          ? `<div class="add-to-cart-btn">
+                              <button disabled style="opacity:0.7; cursor:not-allowed;>
+                                  <img src="../assets/images/icon-add-to-cart.svg" alt="add to cart icon" />
+                                  <span>Out of stock</span>
+                              </button>
+                          </div>`
+                          : `<div class="add-to-cart-btn">
+                            <button>
+                                <img src="../assets/images/icon-add-to-cart.svg" alt="add to cart icon" />
+                                <span>Add to cart</span>
+                            </button>
+                          </div>`
+                      }
+                    
                 `
                 }
                 <h5 class="product-category">${product.category}</h5>
