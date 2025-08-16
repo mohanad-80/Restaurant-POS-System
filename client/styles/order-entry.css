@@ -78,6 +78,12 @@ body {
   margin: 0;
 }
 
+.prep-time {
+  font-size: 12px;
+  color: hsl(7, 20%, 60%);
+  margin-left: 6px;
+}
+
 /* Add to cart button */
 .add-to-cart-btn {
   margin-top: 10px;
