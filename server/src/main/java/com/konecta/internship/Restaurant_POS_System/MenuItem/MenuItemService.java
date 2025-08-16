@@ -133,7 +133,7 @@ public class MenuItemService {
     
     public BigDecimal getMenuItemPrice(Long id)
     {
-        MenuItemEntity item= repository.findById(id).orElseThrow();
+        MenuItemEntity item= repository.findById(id).orElseThrow(()-> new java.util.NoSuchElementException("Menu item with id " + id + " not found"));
         return item.getPrice();
 
     }
