@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     renderCart();
 
-    confirmOrderBtn.addEventListener("click", showOrderConfirmation);
+    confirmOrderBtn.addEventListener("click", confirmOrder);
     startNewOrderBtn.addEventListener("click", startNewOrder);
   }
 
@@ -261,6 +261,35 @@ document.addEventListener("DOMContentLoaded", function () {
   function updateUI() {
     renderProducts();
     renderCart();
+  }
+
+  async function confirmOrder() {
+    const orderPayload = {
+      tableId: tableIdInput.value,
+      staffId: staffIdInput.value,
+      items: cart.map((item) => ({
+        menuItemId: item.id,
+        quantity: item.quantity,
+        notes: item.notes || "",
+      })),
+    };
+
+    try {
+      const response = await fetch("http://localhost:8080/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderPayload),
+      });
+
+      if (!response.ok) throw new Error("Failed to create order");
+
+      const createdOrder = await response.json();
+      console.log("Order created:", createdOrder);
+
+      showOrderConfirmation();
+    } catch (err) {
+      alert("Error submitting order: " + err.message);
+    }
   }
 
   function showOrderConfirmation() {
