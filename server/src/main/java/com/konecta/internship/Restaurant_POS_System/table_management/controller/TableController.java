@@ -1,5 +1,10 @@
-package com.konecta.internship.Restaurant_POS_System.table_management;
+package com.konecta.internship.Restaurant_POS_System.table_management.controller;
 
+import com.konecta.internship.Restaurant_POS_System.table_management.exception.InvalidStatusException;
+import com.konecta.internship.Restaurant_POS_System.table_management.service.TableService;
+import com.konecta.internship.Restaurant_POS_System.table_management.dto.ErrorDto;
+import com.konecta.internship.Restaurant_POS_System.table_management.dto.TableRequestDto;
+import com.konecta.internship.Restaurant_POS_System.table_management.dto.TableResponseDto;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;

@@ -1,4 +1,4 @@
-package com.konecta.internship.Restaurant_POS_System.table_management;
+package com.konecta.internship.Restaurant_POS_System.table_management.dto;
 
 import lombok.Getter;
 import lombok.Setter;

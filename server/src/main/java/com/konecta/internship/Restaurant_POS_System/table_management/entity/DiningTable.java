@@ -1,5 +1,6 @@
-package com.konecta.internship.Restaurant_POS_System.table_management;
+package com.konecta.internship.Restaurant_POS_System.table_management.entity;
 
+import com.konecta.internship.Restaurant_POS_System.table_management.enums.TableStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

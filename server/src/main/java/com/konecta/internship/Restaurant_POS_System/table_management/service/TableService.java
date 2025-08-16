@@ -1,5 +1,11 @@
-package com.konecta.internship.Restaurant_POS_System.table_management;
+package com.konecta.internship.Restaurant_POS_System.table_management.service;
 
+import com.konecta.internship.Restaurant_POS_System.table_management.repository.TableRepository;
+import com.konecta.internship.Restaurant_POS_System.table_management.enums.TableStatus;
+import com.konecta.internship.Restaurant_POS_System.table_management.dto.TableRequestDto;
+import com.konecta.internship.Restaurant_POS_System.table_management.dto.TableResponseDto;
+import com.konecta.internship.Restaurant_POS_System.table_management.entity.DiningTable;
+import com.konecta.internship.Restaurant_POS_System.table_management.exception.InvalidStatusException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;

@@ -1,5 +1,7 @@
-package com.konecta.internship.Restaurant_POS_System.table_management;
+package com.konecta.internship.Restaurant_POS_System.table_management.dto;
 
+import com.konecta.internship.Restaurant_POS_System.table_management.enums.TableStatus;
+import com.konecta.internship.Restaurant_POS_System.table_management.entity.DiningTable;
 import lombok.Getter;
 import lombok.Setter;
 

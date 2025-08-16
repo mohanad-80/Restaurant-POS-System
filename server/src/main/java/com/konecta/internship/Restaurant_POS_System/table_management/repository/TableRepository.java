@@ -1,5 +1,7 @@
-package com.konecta.internship.Restaurant_POS_System.table_management;
+package com.konecta.internship.Restaurant_POS_System.table_management.repository;
 
+import com.konecta.internship.Restaurant_POS_System.table_management.enums.TableStatus;
+import com.konecta.internship.Restaurant_POS_System.table_management.entity.DiningTable;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
