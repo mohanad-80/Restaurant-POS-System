@@ -7,16 +7,8 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.konecta.internship.Restaurant_POS_System.orders.enums.OrderStatus;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.konecta.internship.Restaurant_POS_System.table_management.entity.DiningTable;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -53,9 +45,14 @@ public class Order {
   @JsonManagedReference
   private List<OrderItem> items;
 
-  // Nullable foreign keys for now (no entity mapping yet)
-  @Column(name = "table_id", nullable = true)
-  private Long tableId;
+  @ManyToOne(fetch = FetchType.EAGER, cascade = {
+          CascadeType.PERSIST,
+          CascadeType.MERGE,
+          CascadeType.DETACH,
+          CascadeType.REFRESH
+  })
+  @JoinColumn(name = "table_id")
+  private DiningTable table;
 
   @Column(name = "staff_id", nullable = true)
   private Long staffId;
