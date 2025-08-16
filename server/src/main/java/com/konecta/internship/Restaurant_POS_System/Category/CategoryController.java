@@ -16,38 +16,44 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
 @RestController
-@RequestMapping("/api/v1/categories")
+@RequestMapping("/api/categories")
 public class CategoryController 
 {
     @Autowired
     private CategoryService categoryService;
 
     @GetMapping
-    public List<CategoryEntity> getCategories()
+    public ResponseEntity<List<CategoryEntity>> getCategories() 
     {
-        return categoryService.getCategories();
+        List<CategoryEntity> categories = categoryService.getCategories();
+        return ResponseEntity.ok(categories);
     }
 
     @PostMapping
-    public CategoryEntity addCategory(@RequestBody CategoryEntity category) 
-    {    
-        return categoryService.addCategory(category);
+    public ResponseEntity<CategoryEntity> addCategory( @Valid @RequestBody CategoryDTO dto) 
+    {
+        CategoryEntity savedCategory = categoryService.addCategory(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
     }
 
     @PutMapping("/{id}")
-    public CategoryEntity updateCategory(@PathVariable Long id, @RequestBody CategoryEntity category) 
+    public ResponseEntity<CategoryEntity> updateCategory( @PathVariable Long id, @Valid @RequestBody CategoryDTO dto) 
     {
-        return categoryService.updateCategory(id, category);
+        CategoryEntity updatedCategory = categoryService.updateCategory(id, dto);
+        return ResponseEntity.ok(updatedCategory);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCategory(@PathVariable Long id)
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) 
     {
         categoryService.deleteCategory(id);
+        return ResponseEntity.noContent().build(); 
     }
 
-     @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException ex) 
     {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());

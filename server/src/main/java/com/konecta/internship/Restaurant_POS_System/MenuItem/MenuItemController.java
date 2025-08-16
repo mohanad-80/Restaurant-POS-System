@@ -19,35 +19,48 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.validation.Valid;
+
 @RestController
-@RequestMapping("/api/v1/menu")
+@RequestMapping("/api/menu")
 public class MenuItemController 
 {
-    @Autowired
+     @Autowired
     private MenuItemService menuItemService;
 
     @GetMapping
-    public List<MenuItemEntity> getMenuItems(@RequestParam(required = false) Long categoryId,@RequestParam(required = false) String status) 
+    public ResponseEntity<List<MenuItemEntity>> getMenuItems(@RequestParam(required = false) Long categoryId,@RequestParam(required = false) String status) 
     {
-        return menuItemService.getMenuItems(categoryId,status);   
+        List<MenuItemEntity> items = menuItemService.getMenuItems(categoryId, status);
+        return ResponseEntity.ok(items); 
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<MenuItemEntity> getMenuItemById(@PathVariable Long id) 
+    {
+    MenuItemEntity item = menuItemService.getMenuItemById(id);
+    return ResponseEntity.ok(item);
     }
 
     @PostMapping
-    public MenuItemEntity addMenuItem(@RequestBody MenuItemEntity menuItem)
+    public ResponseEntity<MenuItemEntity> addMenuItem( @Valid @RequestBody MenuItemDTO dto)
     {
-        return menuItemService.addMenuItem(menuItem);
+        MenuItemEntity savedItem = menuItemService.addMenuItem(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedItem); 
     }
 
     @PutMapping("/{id}")
-    public MenuItemEntity updateMenuItem (@PathVariable Long id, @RequestParam Map<String, String> updates) 
+    public ResponseEntity<MenuItemEntity> updateMenuItem(@PathVariable Long id, @RequestParam Map<String, String> updates) 
     {    
-        return menuItemService.updateMenuItem(id, updates);
+        MenuItemEntity updatedItem = menuItemService.updateMenuItem(id, updates);
+        return ResponseEntity.ok(updatedItem); 
     }
     
     @DeleteMapping("/{id}")
-    public void deleteMenuItem(@PathVariable Long id)
+    public ResponseEntity<Void> deleteMenuItem(@PathVariable Long id)
     {
         menuItemService.deleteMenuItem(id);
+        return ResponseEntity.noContent().build(); 
     }
 
     @PostMapping("/uploadImage/{id}")

@@ -1,6 +1,7 @@
 package com.konecta.internship.Restaurant_POS_System.Category;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,23 +17,26 @@ public class CategoryService
         return categoryRepository.findAll();
     }
 
-    public CategoryEntity addCategory(CategoryEntity category)
+    public CategoryEntity addCategory(CategoryDTO dto) 
     {
-        return categoryRepository.save(category);
+        CategoryEntity entity = new CategoryEntity();
+        entity.setName(dto.getName());
+        return categoryRepository.save(entity);
     }
 
-    public CategoryEntity updateCategory(Long id,CategoryEntity category)
+    public CategoryEntity updateCategory(Long id, CategoryDTO dto) 
     {
-        CategoryEntity categ= categoryRepository.findById(id).orElseThrow(() -> new java.util.NoSuchElementException("Category with id " + id + " not found"));
-        categ.setName(category.getName());
-        categoryRepository.save(categ);
-        return categ;
+        CategoryEntity category = categoryRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException("Category with id " + id + " not found"));
+
+        category.setName(dto.getName());
+        return categoryRepository.save(category);
     }
 
     public void deleteCategory(Long id)
     {
-        boolean isExcist=categoryRepository.findById(id).isPresent();
-        if(!isExcist)
+        boolean isExist=categoryRepository.findById(id).isPresent();
+        if(!isExist)
         {
             throw new java.util.NoSuchElementException("Category with id " + id + " not found");
         }
