@@ -1,7 +1,8 @@
-package com.konecta.internship.Restaurant_POS_System;
+package com.konecta.internship.Restaurant_POS_System.auth.security;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.konecta.internship.Restaurant_POS_System.shared.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.AccessDeniedException;
@@ -9,6 +10,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,12 +25,14 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 
-        Map<String, Object> body = new HashMap<>();
-        body.put("status", 403);
-        body.put("error", "Forbidden");
-        body.put("message", "You do not have permission to access this resource.");
-        body.put("path", request.getServletPath());
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(403)
+                .error("ACCESS_DENIED")
+                .message("You don't have permission to access this route")
+                .timestamp(Instant.now())
+                .path(request.getServletPath())
+                .build();
 
-        new ObjectMapper().writeValue(response.getOutputStream(), body);
+        new ObjectMapper().writeValue(response.getOutputStream(), errorResponse);
     }
 }

@@ -1,8 +1,8 @@
-package com.konecta.internship.Restaurant_POS_System.config;
+package com.konecta.internship.Restaurant_POS_System.shared.config;
 
-import com.konecta.internship.Restaurant_POS_System.CustomAccessDeniedHandler;
-import com.konecta.internship.Restaurant_POS_System.CustomAuthenticationEntryPoint;
-import com.konecta.internship.Restaurant_POS_System.CustomAuthenticationFailureHandler;
+import com.konecta.internship.Restaurant_POS_System.auth.security.CustomAccessDeniedHandler;
+import com.konecta.internship.Restaurant_POS_System.auth.security.CustomAuthenticationEntryPoint;
+import com.konecta.internship.Restaurant_POS_System.auth.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +38,10 @@ public class SecurityConfiguration {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exception-> exception.
+                        authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler));
 
 
 

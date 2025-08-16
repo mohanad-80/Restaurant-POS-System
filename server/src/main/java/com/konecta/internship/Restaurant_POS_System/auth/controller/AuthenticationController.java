@@ -1,6 +1,10 @@
-package com.konecta.internship.Restaurant_POS_System.auth;
+package com.konecta.internship.Restaurant_POS_System.auth.controller;
 
 
+import com.konecta.internship.Restaurant_POS_System.auth.dto.response.AuthenticationResponse;
+import com.konecta.internship.Restaurant_POS_System.auth.service.AuthenticationService;
+import com.konecta.internship.Restaurant_POS_System.auth.dto.request.LoginRequest;
+import com.konecta.internship.Restaurant_POS_System.auth.dto.request.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

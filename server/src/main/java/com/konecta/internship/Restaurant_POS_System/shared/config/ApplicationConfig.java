@@ -1,7 +1,7 @@
-package com.konecta.internship.Restaurant_POS_System.config;
+package com.konecta.internship.Restaurant_POS_System.shared.config;
 
 
-import com.konecta.internship.Restaurant_POS_System.User.UserRepository;
+import com.konecta.internship.Restaurant_POS_System.User.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

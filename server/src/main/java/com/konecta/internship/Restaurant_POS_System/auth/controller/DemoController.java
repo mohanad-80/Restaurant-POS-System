@@ -1,4 +1,4 @@
-package com.konecta.internship.Restaurant_POS_System.demo;
+package com.konecta.internship.Restaurant_POS_System.auth.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

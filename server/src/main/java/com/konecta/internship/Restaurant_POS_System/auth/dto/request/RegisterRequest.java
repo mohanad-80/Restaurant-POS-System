@@ -1,4 +1,4 @@
-package com.konecta.internship.Restaurant_POS_System.auth;
+package com.konecta.internship.Restaurant_POS_System.auth.dto.request;
 
 
 import lombok.AllArgsConstructor;

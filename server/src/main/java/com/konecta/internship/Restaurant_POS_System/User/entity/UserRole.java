@@ -1,4 +1,4 @@
-package com.konecta.internship.Restaurant_POS_System.User;
+package com.konecta.internship.Restaurant_POS_System.User.entity;
 
 public enum UserRole {
     ADMIN,

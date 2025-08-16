@@ -1,4 +1,4 @@
-package com.konecta.internship.Restaurant_POS_System.auth;
+package com.konecta.internship.Restaurant_POS_System.auth.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginRequest {
-
-    private String email;
-    private String password;
-
+public class AuthenticationResponse {
+    private String token;
 }

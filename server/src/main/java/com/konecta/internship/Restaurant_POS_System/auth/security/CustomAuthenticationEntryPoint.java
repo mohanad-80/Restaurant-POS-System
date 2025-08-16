@@ -1,4 +1,4 @@
-package com.konecta.internship.Restaurant_POS_System;
+package com.konecta.internship.Restaurant_POS_System.auth.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
