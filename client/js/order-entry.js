@@ -26,14 +26,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function init() {
     try {
+      // Try fetching from backend
+      let response = await fetch("/api/menu");
+
+      if (!response.ok) {
+        throw new Error("Backend not available, falling back to local JSON");
+      }
+
+      products = await response.json();
+
+      // If backend returns empty array, fallback to local JSON
+      if (!products || products.length === 0) {
+        console.warn("No products from backend, loading local JSON...");
+        response = await fetch("../data/data.json");
+        products = await response.json();
+      }
+    } catch (error) {
+      console.error("Error fetching from backend, using local data:", error);
       const response = await fetch("../data/data.json");
       products = await response.json();
-      initializeCategoryFilter();
-      renderProducts();
-    } catch (error) {
-      console.error("Error loading products:", error);
     }
 
+    initializeCategoryFilter();
+    renderProducts();
     renderCart();
 
     confirmOrderBtn.addEventListener("click", confirmOrder);
