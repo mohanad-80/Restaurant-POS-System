@@ -1,6 +1,7 @@
 package com.konecta.internship.Restaurant_POS_System.MenuItem;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,8 +20,7 @@ import com.konecta.internship.Restaurant_POS_System.Category.CategoryEntity;
 import com.konecta.internship.Restaurant_POS_System.Category.CategoryRepository;
 
 @Service
-public class MenuItemService 
-{
+public class MenuItemService {
     @Autowired
     private MenuItemRepository repository;
 
@@ -76,8 +76,7 @@ public class MenuItemService
         return repository.save(item);
     }
 
-    public void deleteMenuItem(int id) 
-    {
+    public void deleteMenuItem(int id) {
         boolean isExcist = repository.findById(id).isPresent();
         if (!isExcist) {
             throw new IllegalAccessError("OOPS...This item not found");
@@ -86,34 +85,35 @@ public class MenuItemService
         }
     }
 
-    public ResponseEntity<String> uploadImage(int id, MultipartFile image)
+    public ResponseEntity<String> uploadImage(int id, MultipartFile image) 
     {
-        try 
-        {
-            MenuItemEntity item = repository.findById(id).orElseThrow(); 
+        try {
+            MenuItemEntity item = repository.findById(id).orElseThrow();
 
             if (item.getImage_path() != null) {
                 Path oldFilePath = Paths.get(item.getImage_path().replaceFirst("^/", ""));
-                try 
-                {
+                try {
                     Files.deleteIfExists(oldFilePath);
-                } 
-                catch (IOException e) 
-                {
+                } catch (IOException e) {
                     System.err.println("Could not delete old image: " + oldFilePath);
                 }
+            }
+
+            String imagePath = fileStorageService.storeFile(image, id);
+            item.setImage_path(imagePath);
+            repository.save(item);
+
+            return ResponseEntity.ok("Image uploaded successfully: " + imagePath);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Image upload failed");
         }
 
-        String imagePath = fileStorageService.storeFile(image, id);
-        item.setImage_path(imagePath);
-        repository.save(item);
-
-        return ResponseEntity.ok("Image uploaded successfully: " + imagePath);
-    } 
-    catch (Exception e) 
-    {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Image upload failed");
     }
+    
+    public BigDecimal getMenuItemPrice(int id)
+    {
+        MenuItemEntity item= repository.findById(id).orElseThrow();
+        return BigDecimal.valueOf(item.getPrice());
 
     }
 }
