@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.konecta.internship.Restaurant_POS_System.MenuItem.MenuItemService;
+import com.konecta.internship.Restaurant_POS_System.User.repository.UserRepository;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderItemDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderRequestDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.UpdateOrderDTO;
@@ -21,6 +22,7 @@ import com.konecta.internship.Restaurant_POS_System.orders.exceptions.OrderItemN
 import com.konecta.internship.Restaurant_POS_System.orders.exceptions.OrderNotFoundException;
 import com.konecta.internship.Restaurant_POS_System.orders.repositories.OrderItemRepository;
 import com.konecta.internship.Restaurant_POS_System.orders.repositories.OrderRepository;
+import com.konecta.internship.Restaurant_POS_System.table_management.repository.TableRepository;
 
 @Service
 public class OrderService {
@@ -28,11 +30,20 @@ public class OrderService {
   private final OrderRepository orderRepository;
   private final OrderItemRepository orderItemRepository;
   private final MenuItemService menuItemService;
+  private final TableRepository diningTableRepository;
+  private final UserRepository userRepository;
 
-  public OrderService(OrderRepository orderRepository, OrderItemRepository orderItemRepository, MenuItemService menuItemService) {
+  public OrderService(
+      OrderRepository orderRepository,
+      OrderItemRepository orderItemRepository,
+      MenuItemService menuItemService,
+      TableRepository diningTableRepository,
+      UserRepository userRepository) {
     this.orderRepository = orderRepository;
     this.orderItemRepository = orderItemRepository;
     this.menuItemService = menuItemService;
+    this.diningTableRepository = diningTableRepository;
+    this.userRepository = userRepository;
   }
 
   public List<Order> getAllOrders() {
@@ -50,8 +61,14 @@ public class OrderService {
     order.setOrderNumber(UUID.randomUUID().toString());
     order.setCreatedAt(LocalDateTime.now());
     order.setStatus(OrderStatus.OPEN);
-    order.setTableId(dto.getTableId());
-    order.setStaffId(dto.getStaffId());
+
+    if (dto.getTableId() != null) {
+      order.setTable(diningTableRepository.findById(dto.getTableId())
+          .orElseThrow(() -> new IllegalArgumentException("Table not found")));
+    }
+
+    order.setStaff(userRepository.findById(dto.getStaffId().intValue())
+        .orElseThrow(() -> new IllegalArgumentException("Staff not found")));
 
     BigDecimal total = BigDecimal.ZERO;
     List<OrderItem> items = new ArrayList<>();
@@ -73,10 +90,11 @@ public class OrderService {
   private OrderItem buildOrderItemFromDTO(OrderItemDTO dto, Order order) {
     OrderItem item = new OrderItem();
     item.setOrder(order);
-    item.setMenuItemId(dto.getMenuItemId());
+    var menuItem = menuItemService.getMenuItemById(dto.getMenuItemId());
+    item.setMenuItem(menuItem);
     item.setQuantity(dto.getQuantity());
 
-    BigDecimal unitPrice = menuItemService.getMenuItemPrice(dto.getMenuItemId());
+    BigDecimal unitPrice = menuItem.getPrice();
     item.setUnitPrice(unitPrice);
     item.setTotalPrice(unitPrice.multiply(BigDecimal.valueOf(dto.getQuantity())));
     item.setStatus(OrderItemStatus.PENDING);
@@ -93,7 +111,8 @@ public class OrderService {
     Order order = this.getOrderById(id);
 
     if (dto.getTableId() != null) {
-      order.setTableId(dto.getTableId());
+      order.setTable(diningTableRepository.findById(dto.getTableId())
+          .orElseThrow(() -> new IllegalArgumentException("Table not found")));
     }
     if (dto.getDiscount() != null) {
       order.setDiscount(dto.getDiscount());
