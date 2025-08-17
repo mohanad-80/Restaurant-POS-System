@@ -1,4 +1,4 @@
-const apiUrl = "http://localhost:8080/tables";
+const apiUrl = "http://localhost:8080/api/tables";
 
 // Status/Color mapping
 const statusColors = {
