@@ -36,10 +36,10 @@ public class InventoryService
         entity.setAvailable_units(dto.getAvailable_units());
         entity.setUnit(dto.getUnit());
 
-        // if (dto.getMenuItemIds() != null) {
-        //     List<MenuItemEntity> menuItems = menuItemRepository.findAllById(dto.getMenuItemIds());
-        //     entity.setMenuItems(menuItems);
-        // }
+        if (dto.getMenuItemIds() != null) {
+            List<MenuItemEntity> menuItems = menuItemRepository.findAllById(dto.getMenuItemIds());
+            entity.setMenuItems(menuItems);
+        }
 
         return inventoryRepository.save(entity);
     }
