@@ -3,6 +3,7 @@ package com.konecta.internship.Restaurant_POS_System.orders.entity;
 import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.konecta.internship.Restaurant_POS_System.MenuItem.MenuItemEntity;
 import com.konecta.internship.Restaurant_POS_System.orders.enums.OrderItemStatus;
 
 import jakarta.persistence.Column;
@@ -48,7 +49,7 @@ public class OrderItem {
   @JsonBackReference
   private Order order;
 
-  // Nullable foreign key for menu item (no entity yet)
-  @Column(name = "menu_item_id", nullable = true)
-  private Long menuItemId;
+  @ManyToOne
+  @JoinColumn(name = "menu_item_id")
+  private MenuItemEntity menuItem;
 }
