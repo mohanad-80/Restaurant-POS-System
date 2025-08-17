@@ -94,7 +94,7 @@ public class OrderService {
     item.setMenuItem(menuItem);
     item.setQuantity(dto.getQuantity());
 
-    BigDecimal unitPrice = menuItemService.getMenuItemPrice(dto.getMenuItemId());
+    BigDecimal unitPrice = menuItem.getPrice();
     item.setUnitPrice(unitPrice);
     item.setTotalPrice(unitPrice.multiply(BigDecimal.valueOf(dto.getQuantity())));
     item.setStatus(OrderItemStatus.PENDING);
