@@ -27,13 +27,21 @@ document.addEventListener("DOMContentLoaded", function () {
   async function init() {
     try {
       // Try fetching from backend
-      let response = await fetch("/api/menu");
+      let response = await fetch("http://localhost:8080/api/menu");
+
+      console.log(response);
 
       if (!response.ok) {
         throw new Error("Backend not available, falling back to local JSON");
       }
 
       products = await response.json();
+      products = products.map(({ image_path, ...rest }) => ({
+        ...rest,
+        image: image_path,
+        category: rest.category.name,
+      }));
+      console.log(products);
 
       // If backend returns empty array, fallback to local JSON
       if (!products || products.length === 0) {
