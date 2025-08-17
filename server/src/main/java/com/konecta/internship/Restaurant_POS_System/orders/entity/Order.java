@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.konecta.internship.Restaurant_POS_System.User.entity.User;
 import com.konecta.internship.Restaurant_POS_System.orders.enums.OrderStatus;
 
 import com.konecta.internship.Restaurant_POS_System.table_management.entity.DiningTable;
@@ -54,6 +55,7 @@ public class Order {
   @JoinColumn(name = "table_id")
   private DiningTable table;
 
-  @Column(name = "staff_id", nullable = true)
-  private Long staffId;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "staff_id")
+  private User staff;
 }
