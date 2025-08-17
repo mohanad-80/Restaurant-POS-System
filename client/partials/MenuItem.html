@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Restaurant Admin — Categories & Menu</title>
+  <link rel="stylesheet" href="./styles/admin.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>Restaurant Admin</h1>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-target="tab-categories">Categories</button>
+    <button class="tab-btn" data-target="tab-menu">Menu Items</button>
+  </nav>
+
+  <main>
+    <!-- ========== Categories ========== -->
+    <section id="tab-categories" class="tab active">
+      <div class="card">
+        <h2>Categories</h2>
+
+        <form id="categoryForm" class="form-grid">
+          <input type="hidden" id="categoryId" />
+          <label>
+            Name
+            <input type="text" id="categoryName" placeholder="Category name" required />
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="btn primary">Save</button>
+            <button type="button" id="categoryResetBtn" class="btn">Reset</button>
+          </div>
+        </form>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>ID</th><th>Name</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="categoryTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== Menu Items ========== -->
+    <section id="tab-menu" class="tab">
+      <div class="card">
+        <h2>Menu Items</h2>
+
+        <div class="filters">
+          <label>
+            Category
+            <select id="filterCategory"></select>
+          </label>
+          <label>
+            Status
+            <select id="filterStatus">
+              <option value="">(All)</option>
+              <option value="AVAILABLE">AVAILABLE</option>
+              <option value="UNAVAILABLE">UNAVAILABLE</option>
+            </select>
+          </label>
+          <button id="applyFilters" class="btn">Apply</button>
+          <button id="clearFilters" class="btn">Clear</button>
+        </div>
+
+        <form id="menuForm" class="form-grid">
+          <input type="hidden" id="menuId" />
+          <label>
+            Name
+            <input type="text" id="menuName" placeholder="Item name" required />
+          </label>
+          <label>
+            Price
+            <input type="number" id="menuPrice" step="0.01" placeholder="0.00" required />
+          </label>
+          <label>
+            Preparation Time (min)
+            <input type="number" id="menuPrep" placeholder="e.g., 15" required />
+          </label>
+          <label>
+            Status
+            <select id="menuStatus" required>
+              <option value="AVAILABLE">AVAILABLE</option>
+              <option value="UNAVAILABLE">UNAVAILABLE</option>
+            </select>
+          </label>
+          <label>
+            Category
+            <select id="menuCategory" required></select>
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="btn primary">Save</button>
+            <button type="button" id="menuResetBtn" class="btn">Reset</button>
+          </div>
+        </form>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th><th>Name</th><th>Price</th><th>Prep</th>
+                <th>Status</th><th>Category</th><th>Image</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="menuTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="./js/admin.js"></script>
+</body>
+</html>
