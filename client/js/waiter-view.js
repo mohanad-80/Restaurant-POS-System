@@ -154,7 +154,30 @@ document.addEventListener("DOMContentLoaded", () => {
       .replaceAll("'", "&#039;");
   }
 
-  // Polling MVP
+  function connectWebSocket() {
+    const socket = new SockJS("http://127.0.0.1:8080/ws");
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, () => {
+      console.log("Connected to WebSocket!");
+
+      // Subscribe to whole orders
+      stompClient.subscribe("/topic/orders", (msg) => {
+        const order = JSON.parse(msg.body);
+        console.log("Order update:", order);
+        fetchOrders(); // simplest: refetch all
+      });
+
+      // Subscribe to individual item updates
+      stompClient.subscribe("/topic/order-items", (msg) => {
+        const item = JSON.parse(msg.body);
+        console.log("Item update:", item);
+        fetchOrders();
+      });
+    });
+  }
+
+  // Initial load
   fetchOrders();
-  setInterval(fetchOrders, 5000);
+  connectWebSocket();
 });
