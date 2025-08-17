@@ -1,151 +1,180 @@
-:root {
-  --bg: #f5f7fb;
-  --text: #222;
-  --muted: #666;
-  --border: #e3e6ef;
-  --primary: #2563eb;
-  --danger: #dc2626;
-  --warn: #f59e0b;
-  --success: #16a34a;
-  --card: #fff;
-  --shadow: 0 6px 20px rgba(0,0,0,.06);
+/* ---------- Fonts ---------- */
+@font-face {
+  font-family: 'RedHatText';
+  src: url('./assets/fonts/RedHatText-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
 }
 
-* { box-sizing: border-box; }
+@font-face {
+  font-family: 'RedHatText';
+  src: url('./assets/fonts/RedHatText-Italic-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+}
+
 
 body {
-  margin: 0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-}
-
-.app-header {
-  background: #0f172a;
-  color: #fff;
-  padding: 16px 20px;
-  box-shadow: var(--shadow);
-}
-.app-header h1 { margin: 0; font-size: 20px; }
-
-.tabs {
-  display: flex;
-  gap: 8px;
-  background: #111827;
-  padding: 8px 12px;
-}
-.tab-btn {
-  background: transparent;
-  color: #e5e7eb;
-  border: 1px solid transparent;
-  padding: 10px 14px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-.tab-btn.active {
-  background: #1f2937;
-  border-color: #374151;
-  color: #fff;
-}
-
-main { padding: 20px; }
-
-.tab { display: none; }
-.tab.active { display: block; }
-
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 18px;
-  box-shadow: var(--shadow);
-}
-
-h2 { margin: 0 0 12px 0; }
-
-.form-grid {
+  font-family: 'RedHatText', sans-serif;
+  margin: 20px;
+  padding: 20px;
+  background-color: hsl(13, 31%, 94%);
   display: grid;
-  grid-template-columns: repeat(4, minmax(180px, 1fr));
-  gap: 12px;
-  margin-bottom: 16px;
+  grid-template-columns: 1fr 300px;
+  position: relative;
 }
-.form-grid label { display: grid; gap: 6px; font-size: 14px; color: var(--muted); }
-.form-grid input, .form-grid select {
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: #fff;
-  color: var(--text);
+
+.main-content {
+  grid-column: 1;
 }
-.form-actions {
+
+.main-content h2 {
+  color: #333;
+  margin: 20px 0;
+  font-size: xx-large;
+  padding-left: 15px;
+}
+
+.products {
   display: flex;
-  align-items: end;
-  gap: 8px;
-}
-
-.btn {
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: #eef2ff;
-  cursor: pointer;
-}
-.btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
-.btn.danger { background: var(--danger); color: #fff; border-color: var(--danger); }
-.btn.warn   { background: var(--warn); color: #111; border-color: var(--warn); }
-.btn.success{ background: var(--success); color: #fff; border-color: var(--success); }
-
-.table-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; }
-thead th {
-  text-align: left;
-  background: #f1f5f9;
-  border-bottom: 1px solid var(--border);
-  padding: 10px;
-}
-tbody td {
-  border-bottom: 1px solid var(--border);
-  padding: 10px;
-  vertical-align: middle;
-}
-tbody tr:hover { background: #fafafa; }
-
-img.menu-thumb {
-  width: 64px; height: 64px; object-fit: cover; border-radius: 8px;
-  border: 1px solid var(--border);
-}
-
-.filters {
-  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
-  align-items: end;
+  justify-content: flex-start;
+}
+
+
+.product-card {
+  width: 250px;
+  padding: 15px;
+}
+
+.product-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 6px;
   margin-bottom: 10px;
 }
-.filters label {
-  display: grid; gap: 6px; color: var(--muted); font-size: 14px;
-}
-.filters select {
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: #fff;
+
+.product-category {
+  color: hsl(7, 20%, 60%);
+  font-size: 14px;
+  font-weight: 400;
+  margin: 15px 0 5px 0;
 }
 
-/* Toast */
-.toast {
-  position: fixed;
-  right: 16px;
-  bottom: 16px;
-  background: #111827;
-  color: #fff;
-  padding: 12px 14px;
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-  opacity: 0; transform: translateY(10px);
-  pointer-events: none;
-  transition: all .25s ease;
-  z-index: 9999;
+.product-name {
+  color: black;
+  font-size: 16px;
+  margin: 5px 0;
 }
-.toast.show { opacity: 1; transform: translateY(0); }
-.toast.error { background: #991b1b; }
-.toast.success { background: #065f46; }
+
+.product-price {
+  color: hsl(14, 86%, 42%);
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.prep-time {
+  font-size: 12px;
+  color: hsl(7, 20%, 60%);
+  margin-left: 6px;
+}
+
+.add-to-cart-btn,
+.quantity-btn {
+  width: 70%;
+  margin: -35px auto 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.add-to-cart-btn button {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+  border-radius: 50px;
+  padding: 8px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 100%;
+  transition: all 0.2s;
+}
+
+.add-to-cart-btn button:hover {
+  border: 1px solid hsl(14, 86%, 42%);
+  color: hsl(14, 86%, 42%);
+}
+
+.add-to-cart-btn button img {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+}
+
+.add-to-cart-btn button span {
+  font-size: 14px;
+}
+
+
+.quantity-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 10px;
+  background-color: hsl(14, 86%, 42%);
+  border: 1px solid hsl(14, 86%, 42%);
+  border-radius: 50px;
+  height: 40px;
+  padding: 0 15px;
+  box-sizing: border-box;
+}
+
+.quantity-btn button {
+  background: none;
+  border: 1px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quantity-btn .quantity-value {
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  min-width: 20px;
+  text-align: center;
+}
+
+.quantity-btn button:hover {
+  background-color: white;
+}
+
+.quantity-btn button:hover img {
+  filter: invert(29%) sepia(22%) saturate(5963%) hue-rotate(354deg) brightness(92%) contrast(98%);
+}
+
+.quantity-btn img {
+  width: 12px;
+  height: 12px;
+}
+
+.selected-product .product-image {
+  border: 3px solid hsl(14, 86%, 42%);
+  box-sizing: border-box;
+}
+
+.right-panel {
+  grid-column: 2;
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+}
+
