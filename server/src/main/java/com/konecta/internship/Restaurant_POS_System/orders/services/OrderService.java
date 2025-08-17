@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.konecta.internship.Restaurant_POS_System.MenuItem.MenuItemService;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderItemDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderRequestDTO;
 import com.konecta.internship.Restaurant_POS_System.orders.dto.UpdateOrderDTO;
@@ -24,10 +24,16 @@ import com.konecta.internship.Restaurant_POS_System.orders.repositories.OrderRep
 
 @Service
 public class OrderService {
-  @Autowired
-  private OrderRepository orderRepository;
-  @Autowired
-  private OrderItemRepository orderItemRepository;
+
+  private final OrderRepository orderRepository;
+  private final OrderItemRepository orderItemRepository;
+  private final MenuItemService menuItemService;
+
+  public OrderService(OrderRepository orderRepository, OrderItemRepository orderItemRepository, MenuItemService menuItemService) {
+    this.orderRepository = orderRepository;
+    this.orderItemRepository = orderItemRepository;
+    this.menuItemService = menuItemService;
+  }
 
   public List<Order> getAllOrders() {
     return orderRepository.findAll();
@@ -51,19 +57,7 @@ public class OrderService {
     List<OrderItem> items = new ArrayList<>();
 
     for (OrderItemDTO itemDto : dto.getItems()) {
-      OrderItem item = new OrderItem();
-      item.setOrder(order);
-      item.setMenuItemId(itemDto.getMenuItemId());
-      item.setQuantity(itemDto.getQuantity());
-
-      // Need menu service to fetch the menu item price from the db
-      // BigDecimal unitPrice = menuService.getMenuItemPrice(itemDto.getMenuItemId());
-      BigDecimal unitPrice = BigDecimal.ONE; // placeholder
-      item.setUnitPrice(unitPrice);
-      item.setTotalPrice(unitPrice.multiply(BigDecimal.valueOf(itemDto.getQuantity())));
-      item.setStatus(OrderItemStatus.PENDING);
-      item.setNotes(itemDto.getNotes());
-
+      OrderItem item = buildOrderItemFromDTO(itemDto, order);
       total = total.add(item.getTotalPrice());
       items.add(item);
     }
@@ -74,6 +68,21 @@ public class OrderService {
     order.setTaxAmount(calculateTax(total));
 
     return orderRepository.save(order);
+  }
+
+  private OrderItem buildOrderItemFromDTO(OrderItemDTO dto, Order order) {
+    OrderItem item = new OrderItem();
+    item.setOrder(order);
+    item.setMenuItemId(dto.getMenuItemId());
+    item.setQuantity(dto.getQuantity());
+
+    BigDecimal unitPrice = menuItemService.getMenuItemPrice(dto.getMenuItemId());
+    item.setUnitPrice(unitPrice);
+    item.setTotalPrice(unitPrice.multiply(BigDecimal.valueOf(dto.getQuantity())));
+    item.setStatus(OrderItemStatus.PENDING);
+    item.setNotes(dto.getNotes());
+
+    return item;
   }
 
   private BigDecimal calculateTax(BigDecimal total) {
@@ -105,19 +114,7 @@ public class OrderService {
     List<OrderItem> items = order.getItems();
     BigDecimal total = order.getTotalAmount();
 
-    OrderItem item = new OrderItem();
-    item.setOrder(order);
-    item.setMenuItemId(dto.getMenuItemId());
-    item.setQuantity(dto.getQuantity());
-
-    // Need menu service to fetch the menu item price from the db
-    // BigDecimal unitPrice = menuService.getMenuItemPrice(itemDto.getMenuItemId());
-    BigDecimal unitPrice = BigDecimal.ONE; // placeholder
-    item.setUnitPrice(unitPrice);
-    item.setTotalPrice(unitPrice.multiply(BigDecimal.valueOf(dto.getQuantity())));
-    item.setStatus(OrderItemStatus.PENDING);
-    item.setNotes(dto.getNotes());
-
+    OrderItem item = buildOrderItemFromDTO(dto, order);
     total = total.add(item.getTotalPrice());
     items.add(item);
 

@@ -7,9 +7,11 @@ import com.konecta.internship.Restaurant_POS_System.orders.enums.OrderStatus;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Positive;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class UpdateOrderDTO {
   @Positive(message = "tableId must be a positive value")
   private Long tableId;
