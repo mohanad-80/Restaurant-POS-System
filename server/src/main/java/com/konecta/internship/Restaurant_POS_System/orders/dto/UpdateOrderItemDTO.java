@@ -1,5 +1,7 @@
 package com.konecta.internship.Restaurant_POS_System.orders.dto;
 
+import com.konecta.internship.Restaurant_POS_System.orders.enums.OrderItemStatus;
+
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,4 +13,6 @@ public class UpdateOrderItemDTO {
   private Integer quantity;
 
   private String notes;
+
+  private OrderItemStatus status;
 }
