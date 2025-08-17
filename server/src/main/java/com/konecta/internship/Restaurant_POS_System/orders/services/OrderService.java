@@ -29,7 +29,8 @@ public class OrderService {
   private final OrderItemRepository orderItemRepository;
   private final MenuItemService menuItemService;
 
-  public OrderService(OrderRepository orderRepository, OrderItemRepository orderItemRepository, MenuItemService menuItemService) {
+  public OrderService(OrderRepository orderRepository, OrderItemRepository orderItemRepository,
+      MenuItemService menuItemService) {
     this.orderRepository = orderRepository;
     this.orderItemRepository = orderItemRepository;
     this.menuItemService = menuItemService;
@@ -130,10 +131,11 @@ public class OrderService {
         .orElseThrow(() -> new OrderItemNotFoundException(
             "Order item with ID " + id + " not found."));
 
-    // Case 1: quantity change (with or without notes)
+    boolean updated = false;
+
+    // Case 1: quantity change (recalculate order totals)
     if (dto.getQuantity() != null) {
       item.setQuantity(dto.getQuantity());
-
       BigDecimal unitPrice = item.getUnitPrice();
       item.setTotalPrice(unitPrice.multiply(BigDecimal.valueOf(dto.getQuantity())));
 
@@ -144,19 +146,28 @@ public class OrderService {
 
       order.setTotalAmount(newOrderTotal);
       order.setTaxAmount(calculateTax(newOrderTotal));
-
-      if (dto.getNotes() != null) {
-        item.setNotes(dto.getNotes());
-      }
-
       orderRepository.save(order);
-    } else if (dto.getNotes() != null) {
-      // Case 2: only notes changed
-      item.setNotes(dto.getNotes());
-      orderItemRepository.save(item);
+
+      updated = true;
     }
 
-    return item;
+    // Case 2: notes change
+    if (dto.getNotes() != null) {
+      item.setNotes(dto.getNotes());
+      updated = true;
+    }
+
+    // Case 3: status change
+    if (dto.getStatus() != null) {
+      item.setStatus(dto.getStatus());
+      updated = true;
+    }
+
+    if (updated) {
+      return orderItemRepository.save(item);
+    }
+
+    return item; // no changes
   }
 
   public void deleteOrderItem(Long itemId) {
