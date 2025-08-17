@@ -1,0 +1,9 @@
+package com.konecta.internship.Restaurant_POS_System.orders.enums;
+
+public enum OrderStatus {
+  OPEN,
+  IN_KITCHEN,
+  SERVED,
+  PAID,
+  CANCELLED
+}
