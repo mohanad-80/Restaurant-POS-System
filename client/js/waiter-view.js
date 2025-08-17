@@ -1,112 +1,160 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const API_BASE = "http://127.0.0.1:8080/api/orders";
+
   const notReadyContainer = document.getElementById("not-ready-items");
   const readyContainer = document.getElementById("ready-items");
   const servedContainer = document.getElementById("served-items");
 
   async function fetchOrders() {
     try {
-      let response = await fetch("http://localhost:8080/api/orders");
-      if (!response.ok) throw new Error("Backend not available");
-
-      const orders = await response.json();
-      renderOrders(flattenOrderItems(orders));
-    } catch (err) {
-      console.error("Error fetching orders:", err);
+      const res = await fetch(API_BASE);
+      if (!res.ok) throw new Error("Failed to fetch orders");
+      const orders = await res.json();
+      renderItems(flattenOrderItems(orders));
+    } catch (e) {
+      console.error(e);
     }
   }
 
+  // Attach order.createdAt, tableNumber, waiterName to each item
   function flattenOrderItems(orders) {
-    // Flatten: order -> order.items while attaching order.createdAt
-    return orders.flatMap(order =>
-      order.items.map(item => ({
-        id: item.id,
-        name: item.menuItem.name,
+    return orders.flatMap((order) =>
+      (order.items || []).map((item) => ({
+        itemId: item.id,
+        name: item.menuItem?.name ?? "Unknown item",
         quantity: item.quantity,
-        createdAt: order.createdAt, // attach from order
-        status: item.status
+        status: item.status, // PENDING | READY | SERVED
+        notes: item.notes || "",
+        createdAt: order.createdAt,
+        tableNumber: order.table?.tableNumber ?? "—",
+        waiterName: order.staff?.name ?? "—",
+        orderId: order.id,
+        orderNumber: order.orderNumber,
       }))
     );
   }
 
-  function renderOrders(items) {
+  function minutesAgo(ts) {
+    const ms = Date.now() - new Date(ts).getTime();
+    const mins = Math.max(0, Math.floor(ms / 60000));
+    return mins === 0 ? "just now" : `${mins} min ago`;
+  }
+
+  function renderItems(items) {
     notReadyContainer.innerHTML = "";
     readyContainer.innerHTML = "";
     servedContainer.innerHTML = "";
 
-    items.forEach(item => {
+    items.forEach((it) => {
       const card = document.createElement("div");
       card.className = "order-card";
 
-      const minutesAgo = Math.floor(
-        (Date.now() - new Date(item.createdAt)) / 60000
-      );
-
       card.innerHTML = `
-        <div class="order-info">
-          <p class="order-name">${item.name} (${item.quantity}x)</p>
-          <p class="order-meta">${minutesAgo} min ago</p>
+        <div class="order-top">
+          <div class="badges">
+            <span class="badge">Table ${it.tableNumber}</span>
+            <span class="badge">${escapeHtml(it.waiterName)}</span>
+            <span class="badge">#${shortOrder(it.orderNumber)}</span>
+          </div>
+          <span class="timeago">${minutesAgo(it.createdAt)}</span>
         </div>
+
+        <div class="order-main">
+          <p class="item-name">${escapeHtml(it.name)}</p>
+          <p class="qty">${it.quantity}x</p>
+        </div>
+
+        ${it.notes ? `<p class="notes">Note: ${escapeHtml(it.notes)}</p>` : ""}
+
         <div class="order-actions">
-          <button class="move-left">⬅</button>
-          <button class="move-right">➡</button>
+          <button class="move-left" ${
+            it.status === "PENDING" ? "disabled" : ""
+          }>⬅</button>
+          <button class="move-right" ${
+            it.status === "SERVED" ? "disabled" : ""
+          }>➡</button>
           <button class="cancel-btn">✖</button>
         </div>
       `;
 
-      // Button events
-      card.querySelector(".move-left").addEventListener("click", () =>
-        updateStatus(item.id, prevStatus(item.status))
-      );
-      card.querySelector(".move-right").addEventListener("click", () =>
-        updateStatus(item.id, nextStatus(item.status))
-      );
-      card.querySelector(".cancel-btn").addEventListener("click", () =>
-        cancelItem(item.id)
-      );
+      // Wire actions
+      card.querySelector(".move-left").addEventListener("click", () => {
+        const newStatus = prevStatus(it.status);
+        if (newStatus !== it.status) updateStatus(it.itemId, newStatus);
+      });
 
-      if (item.status === "PENDING") notReadyContainer.appendChild(card);
-      else if (item.status === "READY") readyContainer.appendChild(card);
-      else if (item.status === "SERVED") servedContainer.appendChild(card);
+      card.querySelector(".move-right").addEventListener("click", () => {
+        const newStatus = nextStatus(it.status);
+        if (newStatus !== it.status) updateStatus(it.itemId, newStatus);
+      });
+
+      card.querySelector(".cancel-btn").addEventListener("click", async () => {
+        const ok = confirm("Cancel this item?");
+        if (ok) await cancelItem(it.itemId);
+      });
+
+      // Drop into correct lane
+      if (it.status === "PENDING") notReadyContainer.appendChild(card);
+      else if (it.status === "READY") readyContainer.appendChild(card);
+      else if (it.status === "SERVED") servedContainer.appendChild(card);
     });
   }
 
-  function prevStatus(status) {
-    if (status === "READY") return "PENDING";
-    if (status === "SERVED") return "READY";
+  // Status flow: PENDING → READY → SERVED
+  function prevStatus(s) {
+    if (s === "READY") return "PENDING";
+    if (s === "SERVED") return "READY";
     return "PENDING";
   }
-
-  function nextStatus(status) {
-    if (status === "PENDING") return "READY";
-    if (status === "READY") return "SERVED";
+  function nextStatus(s) {
+    if (s === "PENDING") return "READY";
+    if (s === "READY") return "SERVED";
     return "SERVED";
   }
 
   async function updateStatus(itemId, newStatus) {
     try {
-      await fetch(`http://localhost:8080/api/order-items/${itemId}/status`, {
-        method: "PUT",
+      const res = await fetch(`${API_BASE}/items/${itemId}`, {
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify({ status: newStatus }),
       });
-      fetchOrders();
-    } catch (err) {
-      console.error("Error updating status:", err);
+      if (!res.ok) throw new Error("Failed to update status");
+      await fetchOrders();
+    } catch (e) {
+      console.error(e);
+      alert("Could not update status");
     }
   }
 
   async function cancelItem(itemId) {
     try {
-      await fetch(`http://localhost:8080/api/order-items/${itemId}`, {
-        method: "DELETE"
+      const res = await fetch(`${API_BASE}/items/${itemId}`, {
+        method: "DELETE",
       });
-      fetchOrders();
-    } catch (err) {
-      console.error("Error cancelling item:", err);
+      if (!res.ok) throw new Error("Failed to cancel item");
+      await fetchOrders();
+    } catch (e) {
+      console.error(e);
+      alert("Could not cancel item");
     }
   }
 
-  // Poll every 5s
+  function shortOrder(orderNumber = "") {
+    // show last 6 chars for quick ID
+    return orderNumber.slice(-6);
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  // Polling MVP
   fetchOrders();
   setInterval(fetchOrders, 5000);
 });

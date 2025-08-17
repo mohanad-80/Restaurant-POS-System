@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Waiter View | Orders</title>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../assets/images/favicon-32x32.png"
+    />
     <link rel="stylesheet" href="../styles/waiter-view.css" />
   </head>
   <body>
@@ -13,17 +19,17 @@
 
     <main class="orders-board">
       <section class="order-panel not-ready">
-        <h3>Not Ready</h3>
+        <h3 class="panel-title">Not Ready</h3>
         <div class="order-items" id="not-ready-items"></div>
       </section>
 
       <section class="order-panel ready">
-        <h3>Ready</h3>
+        <h3 class="panel-title">Ready</h3>
         <div class="order-items" id="ready-items"></div>
       </section>
 
       <section class="order-panel served">
-        <h3>Served</h3>
+        <h3 class="panel-title">Served</h3>
         <div class="order-items" id="served-items"></div>
       </section>
     </main>
