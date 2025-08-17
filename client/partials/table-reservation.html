@@ -27,9 +27,59 @@
       <option value="OUT_OF_SERVICE">Out of Service</option>
     </select>
   </div>
+  <!-- Add New Table Button -->
+<div class="mb-3">
+  <button class="btn btn-success" id="addTableBtn">Add New Table</button>
+</div>
 
+<!-- Modal -->
+<div class="modal fade" id="tableModal" tabindex="-1" aria-labelledby="tableModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="tableForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="tableModalLabel">Add Table</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="tableId">
+
+          <div class="mb-3">
+            <label for="tableNumber" class="form-label">Table Number</label>
+            <input type="text" class="form-control" id="tableNumber" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="seats" class="form-label">Seats</label>
+            <input type="number" class="form-control" id="seats" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="section" class="form-label">Section</label>
+            <input type="text" class="form-control" id="section" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select id="status" class="form-select" required>
+              <option value="AVAILABLE">Available</option>
+              <option value="OCCUPIED">Occupied</option>
+              <option value="RESERVED">Reserved</option>
+              <option value="OUT_OF_SERVICE">Out of Service</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" id="saveTableBtn">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+  <!-- Tables Grid -->
   <div class="row" id="tables-container"></div>
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../js/table-reservation.js"></script>
