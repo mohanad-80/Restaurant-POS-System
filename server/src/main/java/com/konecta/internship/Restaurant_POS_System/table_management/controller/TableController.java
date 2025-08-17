@@ -33,7 +33,7 @@ public class TableController {
                 ? tableService.filterTablesByStatus(status)
                 : tableService.fetchAllTables();
 
-        return ResponseEntity.ok(dtos);
+        return ResponseEntity.status(HttpStatus.OK).body(dtos);
     }
 
     @PostMapping
@@ -48,6 +48,11 @@ public class TableController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @GetMapping("/{id}/orders")
+    public ResponseEntity<TableResponseDto> getTableOrders(@PathVariable Long id) {
+        TableResponseDto response = tableService.fetchTableById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<TableResponseDto> editTable(@PathVariable Long id, @Valid @RequestBody TableRequestDto requestDto) {
