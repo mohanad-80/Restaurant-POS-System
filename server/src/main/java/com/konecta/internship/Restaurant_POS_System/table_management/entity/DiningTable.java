@@ -1,10 +1,13 @@
 package com.konecta.internship.Restaurant_POS_System.table_management.entity;
 
+import com.konecta.internship.Restaurant_POS_System.orders.entity.Order;
 import com.konecta.internship.Restaurant_POS_System.table_management.enums.TableStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -26,4 +29,7 @@ public class DiningTable {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private TableStatus status = TableStatus.AVAILABLE;
+
+    @OneToMany(mappedBy = "table", orphanRemoval = true)
+    private Set<Order> orders;
 }
