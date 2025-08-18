@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "tableNumber": "T1",
+    "seats": 4,
+    "section": "Indoor",
+    "status": "AVAILABLE"
+  },
+  {
+    "id": 2,
+    "tableNumber": "T2",
+    "seats": 2,
+    "section": "Patio",
+    "status": "OCCUPIED"
+  },
+  {
+    "id": 3,
+    "tableNumber": "T3",
+    "seats": 6,
+    "section": "Outdoor",
+    "status": "RESERVED"
+  },
+  {
+    "id": 4,
+    "tableNumber": "T4",
+    "seats": 4,
+    "section": "Indoor",
+    "status": "OUT_OF_SERVICE"
+  },
+  {
+    "id": 5,
+    "tableNumber": "T5",
+    "seats": 8,
+    "section": "VIP Lounge",
+    "status": "AVAILABLE"
+  }
+]
