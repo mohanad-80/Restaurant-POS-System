@@ -2,8 +2,10 @@ package com.konecta.internship.Restaurant_POS_System.MenuItem;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.konecta.internship.Restaurant_POS_System.Category.CategoryEntity;
+import com.konecta.internship.Restaurant_POS_System.Inventory.InventoryEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,6 +14,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -46,6 +50,14 @@ public class MenuItemEntity
     private Status status;
 
     private LocalDateTime created_at;
+
+    @ManyToMany
+    @JoinTable(
+        name = "menuitem_inventory",
+        joinColumns = @JoinColumn(name = "menuitem_id"),
+        inverseJoinColumns = @JoinColumn(name = "inventory_id")
+    )
+    private List<InventoryEntity> ingredients;
 
     public enum Status {
         AVAILABLE,
