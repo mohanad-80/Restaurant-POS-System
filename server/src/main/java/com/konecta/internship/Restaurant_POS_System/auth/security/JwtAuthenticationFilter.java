@@ -28,6 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtService;
     private final UserDetailsService userDetailsService;
+    private final TokenBlacklistService tokenBlacklistService;
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
@@ -41,6 +42,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = jwtService.getJwtFromHeader(request);
 
             if (token == null) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            if (tokenBlacklistService.isTokenBlacklisted(token)) {
+                logger.debug("Token is blacklisted");
+                request.setAttribute("exception", new JwtTokenInvalidException("Token has been revoked"));
                 filterChain.doFilter(request, response);
                 return;
             }
