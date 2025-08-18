@@ -1,0 +1,41 @@
+:root {
+  --brand: hsl(14, 86%, 42%);
+  --brand-dark: hsl(14, 85%, 32%);
+  --text-muted: hsl(7, 20%, 60%);
+  --bg: hsl(13, 31%, 94%);
+}
+
+/* Brand text */
+.text-brand {
+  color: var(--brand) !important;
+}
+
+.text-brand-dark {
+  color: var(--brand-dark) !important;
+}
+
+/* Brand backgrounds */
+.bg-brand {
+  background-color: var(--brand) !important;
+  color: #fff !important; /* ensure contrast */
+}
+
+.bg-brand:hover {
+  background-color: var(--brand-dark) !important;
+  color: #fff !important;
+}
+
+/* Brand border */
+.border-brand {
+  border-color: var(--brand) !important;
+}
+
+/* Muted text (custom override) */
+.text-muted-custom {
+  color: var(--text-muted) !important;
+}
+
+/* Custom background */
+.bg-custom {
+  background-color: var(--bg) !important;
+}

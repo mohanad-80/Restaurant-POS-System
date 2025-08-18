@@ -1,13 +1,13 @@
 @font-face {
   font-family: 'RedHatText';
-  src: url('./assets/fonts/RedHatText-VariableFont_wght.ttf') format('truetype');
+  src: url('../assets/fonts/RedHatText-VariableFont_wght.ttf') format('truetype');
   font-weight: 100 900;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'RedHatText';
-  src: url('./assets/fonts/RedHatText-Italic-VariableFont_wght.ttf') format('truetype');
+  src: url('../assets/fonts/RedHatText-Italic-VariableFont_wght.ttf') format('truetype');
   font-weight: 100 900;
   font-style: italic;
 }

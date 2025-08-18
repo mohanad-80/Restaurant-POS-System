@@ -35,6 +35,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/orders").permitAll()
                         .requestMatchers("/api/orders/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()
+                        .requestMatchers("/api/tables/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

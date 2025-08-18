@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Add Inventory</title>
+  <link rel="stylesheet" href="../styles/inventory.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="btn" href="inventory-list.html">← Back</a>
+    <h1>New Inventory Item</h1>
+  </header>
+
+  <main class="container">
+    <form id="form" class="card">
+      <label>Name <input id="name" required /></label>
+      <label>Available Units <input id="available_units" type="number" step="0.01" required /></label>
+      <label>Unit <input id="unit" required /></label>
+      <button type="submit" class="btn">Save</button>
+    </form>
+  </main>
+
+  <script src="../js/inventory.js"></script>
+</body>
+</html>
