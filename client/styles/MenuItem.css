@@ -1,0 +1,128 @@
+
+@font-face {
+  font-family: 'RedHatText';
+  src: url('./assets/fonts/RedHatText-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'RedHatText';
+  src: url('./assets/fonts/RedHatText-Italic-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+}
+
+body {
+  font-family: 'RedHatText', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: hsl(13, 31%, 94%);
+  color: #333;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+  padding: 20px;
+}
+
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  font-weight: 700;
+  color: hsl(14, 86%, 32%);
+}
+
+
+h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  border-left: 4px solid hsl(14, 86%, 42%);
+  padding-left: 10px;
+  color: #222;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+
+input, select {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button.save {
+  background-color: hsl(14, 86%, 42%);
+  color: white;
+}
+
+button.save:hover {
+  background-color: hsl(14, 86%, 35%);
+}
+
+button.reset {
+  background-color: #ccc;
+  color: black;
+}
+
+button.reset:hover {
+  background-color: #aaa;
+}
+
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+table th, table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  font-size: 14px;
+}
+
+table th {
+  background-color: hsl(13, 31%, 90%);
+  font-weight: bold;
+}
+
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+
+.right-panel {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+}
