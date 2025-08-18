@@ -13,168 +13,117 @@
   font-style: italic;
 }
 
-
 body {
   font-family: 'RedHatText', sans-serif;
-  margin: 20px;
-  padding: 20px;
+  margin: 0;
+  padding: 0;
   background-color: hsl(13, 31%, 94%);
+  color: #333;
+}
+
+.container {
   display: grid;
   grid-template-columns: 1fr 300px;
-  position: relative;
+  gap: 20px;
+  padding: 20px;
 }
 
-.main-content {
-  grid-column: 1;
-}
-
-.main-content h2 {
-  color: #333;
-  margin: 20px 0;
-  font-size: xx-large;
-  padding-left: 15px;
-}
-
-.products {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: flex-start;
-}
-
-
-.product-card {
-  width: 250px;
-  padding: 15px;
-}
-
-.product-image {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 6px;
-  margin-bottom: 10px;
-}
-
-.product-category {
-  color: hsl(7, 20%, 60%);
-  font-size: 14px;
-  font-weight: 400;
-  margin: 15px 0 5px 0;
-}
-
-.product-name {
-  color: black;
-  font-size: 16px;
-  margin: 5px 0;
-}
-
-.product-price {
-  color: hsl(14, 86%, 42%);
-  font-size: 16px;
+/* ----------- HEADER ----------- */
+h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
   font-weight: 700;
-  margin: 0;
+  color: hsl(14, 86%, 32%);
 }
 
-.prep-time {
-  font-size: 12px;
-  color: hsl(7, 20%, 60%);
-  margin-left: 6px;
+/* ----------- SECTION HEADINGS ----------- */
+h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  border-left: 4px solid hsl(14, 86%, 42%);
+  padding-left: 10px;
+  color: #222;
 }
 
-.add-to-cart-btn,
-.quantity-btn {
-  width: 70%;
-  margin: -35px auto 0 auto;
-  position: relative;
-  z-index: 1;
+/* ----------- CARD STYLE ----------- */
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
 }
 
-.add-to-cart-btn button {
-  background-color: white;
-  color: black;
-  border: 1px solid black;
-  border-radius: 50px;
-  padding: 8px 15px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
-  width: 100%;
-  transition: all 0.2s;
-}
-
-.add-to-cart-btn button:hover {
-  border: 1px solid hsl(14, 86%, 42%);
-  color: hsl(14, 86%, 42%);
-}
-
-.add-to-cart-btn button img {
-  width: 16px;
-  height: 16px;
-  margin-right: 8px;
-}
-
-.add-to-cart-btn button span {
+/* ----------- FORM INPUTS ----------- */
+input, select {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
   font-size: 14px;
+  margin-right: 10px;
 }
 
+button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
 
-.quantity-btn {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  margin-top: 10px;
+button.save {
   background-color: hsl(14, 86%, 42%);
-  border: 1px solid hsl(14, 86%, 42%);
-  border-radius: 50px;
-  height: 40px;
-  padding: 0 15px;
-  box-sizing: border-box;
+  color: white;
 }
 
-.quantity-btn button {
-  background: none;
-  border: 1px solid white;
-  border-radius: 50%;
-  cursor: pointer;
-  padding: 4px;
+button.save:hover {
+  background-color: hsl(14, 86%, 35%);
+}
+
+button.reset {
+  background-color: #ccc;
+  color: black;
+}
+
+button.reset:hover {
+  background-color: #aaa;
+}
+
+/* ----------- TABLE STYLE ----------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+table th, table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  font-size: 14px;
+}
+
+table th {
+  background-color: hsl(13, 31%, 90%);
+  font-weight: bold;
+}
+
+/* ----------- FILTERS ----------- */
+.filters {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
-.quantity-btn .quantity-value {
-  font-size: 14px;
-  font-weight: bold;
-  color: white;
-  min-width: 20px;
-  text-align: center;
-}
-
-.quantity-btn button:hover {
-  background-color: white;
-}
-
-.quantity-btn button:hover img {
-  filter: invert(29%) sepia(22%) saturate(5963%) hue-rotate(354deg) brightness(92%) contrast(98%);
-}
-
-.quantity-btn img {
-  width: 12px;
-  height: 12px;
-}
-
-.selected-product .product-image {
-  border: 3px solid hsl(14, 86%, 42%);
-  box-sizing: border-box;
-}
-
+/* ----------- RIGHT PANEL ----------- */
 .right-panel {
-  grid-column: 2;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
   position: sticky;
   top: 20px;
   height: fit-content;
 }
-
