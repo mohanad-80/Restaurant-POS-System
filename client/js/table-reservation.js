@@ -53,7 +53,7 @@ function renderTables(tables) {
 
             <!-- Right Column (buttons) -->
             <div class="d-flex flex-column ms-3">
-              <button class="btn btn-sm btn-outline-primary mb-2 edit-btn" data-id="${table.id}">✏️ Edit</button>
+              <button class="btn btn-sm btn-outline-primary mb-2 edit-btn " data-id="${table.id}">✏️ Edit</button>
               <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${table.id}">🗑️ Delete</button>
             </div>
           </div>
