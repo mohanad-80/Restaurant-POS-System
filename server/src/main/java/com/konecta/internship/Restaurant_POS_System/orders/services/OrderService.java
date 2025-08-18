@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.konecta.internship.Restaurant_POS_System.payment.services.PaymentService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.konecta.internship.Restaurant_POS_System.MenuItem.MenuItemService;
@@ -23,8 +25,10 @@ import com.konecta.internship.Restaurant_POS_System.orders.exceptions.OrderNotFo
 import com.konecta.internship.Restaurant_POS_System.orders.repositories.OrderItemRepository;
 import com.konecta.internship.Restaurant_POS_System.orders.repositories.OrderRepository;
 import com.konecta.internship.Restaurant_POS_System.table_management.repository.TableRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@AllArgsConstructor
 public class OrderService {
 
   private final OrderRepository orderRepository;
@@ -33,21 +37,8 @@ public class OrderService {
   private final TableRepository diningTableRepository;
   private final UserRepository userRepository;
   private final OrderNotificationService notificationService;
+  private final PaymentService paymentService;
 
-  public OrderService(
-      OrderRepository orderRepository,
-      OrderItemRepository orderItemRepository,
-      MenuItemService menuItemService,
-      TableRepository diningTableRepository,
-      UserRepository userRepository,
-      OrderNotificationService notificationService) {
-    this.orderRepository = orderRepository;
-    this.orderItemRepository = orderItemRepository;
-    this.menuItemService = menuItemService;
-    this.diningTableRepository = diningTableRepository;
-    this.userRepository = userRepository;
-    this.notificationService = notificationService;
-  }
 
   public List<Order> getAllOrders() {
     return orderRepository.findAll();
@@ -58,6 +49,7 @@ public class OrderService {
         .orElseThrow(() -> new OrderNotFoundException("Order with ID " + id + " not found."));
   }
 
+  @Transactional
   public Order createOrder(OrderRequestDTO dto) {
     Order order = new Order();
 
@@ -89,6 +81,9 @@ public class OrderService {
 
     Order saved = orderRepository.save(order);
     notificationService.notifyOrder(saved);
+
+    paymentService.payForOrder(saved,dto.getMethod());
+
     return saved;
   }
 
