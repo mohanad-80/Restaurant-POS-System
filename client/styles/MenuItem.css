@@ -1,4 +1,4 @@
-/* ---------- Fonts ---------- */
+
 @font-face {
   font-family: 'RedHatText';
   src: url('./assets/fonts/RedHatText-VariableFont_wght.ttf') format('truetype');
@@ -28,7 +28,7 @@ body {
   padding: 20px;
 }
 
-/* ----------- HEADER ----------- */
+
 h1 {
   font-size: 28px;
   margin-bottom: 20px;
@@ -36,7 +36,7 @@ h1 {
   color: hsl(14, 86%, 32%);
 }
 
-/* ----------- SECTION HEADINGS ----------- */
+
 h2 {
   font-size: 22px;
   margin-bottom: 10px;
@@ -45,7 +45,6 @@ h2 {
   color: #222;
 }
 
-/* ----------- CARD STYLE ----------- */
 .card {
   background: white;
   padding: 20px;
@@ -54,7 +53,7 @@ h2 {
   margin-bottom: 20px;
 }
 
-/* ----------- FORM INPUTS ----------- */
+
 input, select {
   padding: 8px 10px;
   border: 1px solid #ccc;
@@ -90,7 +89,7 @@ button.reset:hover {
   background-color: #aaa;
 }
 
-/* ----------- TABLE STYLE ----------- */
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -109,7 +108,7 @@ table th {
   font-weight: bold;
 }
 
-/* ----------- FILTERS ----------- */
+
 .filters {
   display: flex;
   align-items: center;
@@ -117,7 +116,7 @@ table th {
   margin-bottom: 15px;
 }
 
-/* ----------- RIGHT PANEL ----------- */
+
 .right-panel {
   background: white;
   padding: 20px;
