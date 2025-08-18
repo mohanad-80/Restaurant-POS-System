@@ -1,10 +1,9 @@
 package com.konecta.internship.Restaurant_POS_System.payment.controllers;
 
 
-import com.konecta.internship.Restaurant_POS_System.orders.dto.OrderRequestDTO;
 
-import com.konecta.internship.Restaurant_POS_System.payment.dto.OrderWithPaymentRequestDTO;
-import com.konecta.internship.Restaurant_POS_System.payment.dto.OrderWithPaymentResponse;
+import com.konecta.internship.Restaurant_POS_System.payment.entity.Payment;
+import com.konecta.internship.Restaurant_POS_System.payment.enums.PaymentMethod;
 import com.konecta.internship.Restaurant_POS_System.payment.services.PaymentService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -21,10 +20,10 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-    @PostMapping
-    public ResponseEntity<OrderWithPaymentResponse> createOrder(@Valid @RequestBody OrderWithPaymentRequestDTO requestDTO) {
-        OrderWithPaymentResponse response = paymentService.createOrderWithPayment(requestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    @PostMapping("/{id}")
+    public ResponseEntity<Payment> payForOrder(@PathVariable Long id, @Valid @RequestBody PaymentMethod method) {
+        Payment payment = paymentService.payForOrder(id,method);
+        return ResponseEntity.status(HttpStatus.CREATED).body(payment);
     }
 
 }
