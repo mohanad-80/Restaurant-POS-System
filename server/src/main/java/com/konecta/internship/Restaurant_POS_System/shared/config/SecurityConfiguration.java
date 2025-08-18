@@ -32,7 +32,6 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/register").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
-                        //.requestMatchers("/api/payments/**").permitAll()
                         .requestMatchers("/api/menu").permitAll()
                         .requestMatchers("/api/orders").permitAll()
                         .requestMatchers("/api/orders/**").permitAll()
@@ -47,7 +46,8 @@ public class SecurityConfiguration {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exception-> exception.
                         authenticationEntryPoint(customAuthenticationEntryPoint)
-                        .accessDeniedHandler(customAccessDeniedHandler));
+                        .accessDeniedHandler(customAccessDeniedHandler)
+                );
 
 
 
