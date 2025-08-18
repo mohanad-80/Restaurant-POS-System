@@ -32,6 +32,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/register").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
+                        //.requestMatchers("/api/payments/**").permitAll()
                         .requestMatchers("/api/menu").permitAll()
                         .requestMatchers("/api/orders").permitAll()
                         .requestMatchers("/api/orders/**").permitAll()

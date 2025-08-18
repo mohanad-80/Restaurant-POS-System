@@ -21,7 +21,7 @@ public class OrderRequestDTO {
     @Valid
     private List<OrderItemDTO> items;
 
-    @NotEmpty(message = "order must have a payment method ")
+    @NotNull(message = "order must have a payment method ")
     @Valid
     private PaymentMethod method;
 }
