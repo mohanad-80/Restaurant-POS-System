@@ -306,10 +306,6 @@ Below is the Entity Relationship Diagram (ERD) for the Restaurant POS System, sh
 
 This project is open source and available under the [MIT License](./LICENSE).
 
-## Important Links
-
-- Repository Link: [https://github.com/mohanad-80/Restaurant-POS-System](https://github.com/mohanad-80/Restaurant-POS-System)
-
 ## Authors
 
 [Restaurant-POS-System](https://github.com/mohanad-80/Restaurant-POS-System) by:

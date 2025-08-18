@@ -12,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,7 @@ public class TableController {
         this.notificationService = notificationService;
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER','WAITER')")
     @GetMapping
     public ResponseEntity<List<TableResponseDto>> getTables(@RequestParam(required = false) String status) {
         List<TableResponseDto> dtos = (status != null)
@@ -39,24 +41,28 @@ public class TableController {
         return ResponseEntity.status(HttpStatus.OK).body(dtos);
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER','WAITER')")
     @PostMapping
     public ResponseEntity<TableResponseDto> addTable(@Valid @RequestBody TableRequestDto requestDto) {
         TableResponseDto response = tableService.createNewTable(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER','WAITER')")
     @GetMapping("/{id}")
     public ResponseEntity<TableResponseDto> getTable(@PathVariable Long id) {
         TableResponseDto response = tableService.fetchTableById(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER','WAITER')")
     @GetMapping("/{id}/orders")
     public ResponseEntity<TableResponseDto> getTableOrders(@PathVariable Long id) {
         TableResponseDto response = tableService.fetchTableById(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER','WAITER')")
     @PutMapping("/{id}")
     public ResponseEntity<TableResponseDto> editTable(@PathVariable Long id, @Valid @RequestBody TableRequestDto requestDto) {
         TableResponseDto response = tableService.updateExistingTable(id, requestDto);
@@ -64,12 +70,14 @@ public class TableController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER','WAITER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeTable(@PathVariable Long id) {
         tableService.deleteTable(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER','WAITER')")
     @PatchMapping("/{id}")
     public ResponseEntity<TableResponseDto> editTableStatus(
             @PathVariable Long id, @Valid @RequestBody TableStatusUpdateDto statusDto) {
