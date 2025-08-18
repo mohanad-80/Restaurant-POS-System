@@ -26,4 +26,20 @@ public class PaymentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(payment);
     }
 
+    @GetMapping("/{orderId}/receipt.pdf")
+    public ResponseEntity<byte[]> downloadReceipt(@PathVariable Long orderId) {
+        byte[] pdf = paymentService.generateReceiptPdf(orderId);
+
+        var headers = new org.springframework.http.HttpHeaders();
+        headers.setContentType(org.springframework.http.MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(
+                org.springframework.http.ContentDisposition
+                        .attachment()
+                        .filename("receipt-" + orderId + ".pdf")
+                        .build()
+        );
+
+        return new ResponseEntity<>(pdf, headers, org.springframework.http.HttpStatus.OK);
+    }
+
 }
