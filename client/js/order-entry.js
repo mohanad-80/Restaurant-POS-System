@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const orderMeta = document.querySelector(".order-meta");
   const tableIdInput = document.getElementById("tableId");
   const staffIdInput = document.getElementById("staffId");
+  const paymentMethodInput = document.getElementById("paymentMethod");
   const modal = document.getElementById("modal");
   const orderDetails = document.querySelector(".order-details");
   const startNewOrderBtn = document.querySelector(".start-new-order-btn");
@@ -295,6 +296,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const orderPayload = {
       tableId: tableIdInput.value,
       staffId: staffIdInput.value,
+      method: paymentMethodInput.value,
       items: cart.map((item) => ({
         menuItemId: item.id,
         quantity: item.quantity,

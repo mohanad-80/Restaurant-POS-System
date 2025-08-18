@@ -2,6 +2,7 @@ package com.konecta.internship.Restaurant_POS_System.payment.controllers;
 
 
 
+import com.konecta.internship.Restaurant_POS_System.payment.dto.PaymentRequestDTO;
 import com.konecta.internship.Restaurant_POS_System.payment.entity.Payment;
 import com.konecta.internship.Restaurant_POS_System.payment.enums.PaymentMethod;
 import com.konecta.internship.Restaurant_POS_System.payment.services.PaymentService;
@@ -21,9 +22,25 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping("/{id}")
-    public ResponseEntity<Payment> payForOrder(@PathVariable Long id, @Valid @RequestBody PaymentMethod method) {
+    public ResponseEntity<Payment> payForOrder(@PathVariable Long id, @RequestBody PaymentRequestDTO method) {
         Payment payment = paymentService.payForOrder(id,method);
         return ResponseEntity.status(HttpStatus.CREATED).body(payment);
+    }
+
+    @GetMapping("/{orderId}/receipt.pdf")
+    public ResponseEntity<byte[]> downloadReceipt(@PathVariable Long orderId) {
+        byte[] pdf = paymentService.generateReceiptPdf(orderId);
+
+        var headers = new org.springframework.http.HttpHeaders();
+        headers.setContentType(org.springframework.http.MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(
+                org.springframework.http.ContentDisposition
+                        .attachment()
+                        .filename("receipt-" + orderId + ".pdf")
+                        .build()
+        );
+
+        return new ResponseEntity<>(pdf, headers, org.springframework.http.HttpStatus.OK);
     }
 
 }

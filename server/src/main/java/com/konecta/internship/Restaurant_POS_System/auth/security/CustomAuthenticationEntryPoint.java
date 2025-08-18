@@ -19,15 +19,16 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
 
+        Map<String, Object> body = new HashMap<>();
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-        Map<String, Object> body = new HashMap<>();
+
         body.put("status", 401);
         body.put("error", "Unauthorized");
         body.put("message", "Authentication failed: " + authException.getMessage());
         body.put("path", request.getServletPath());
 
-        new ObjectMapper().writeValue(response.getOutputStream(), body);
+        new ObjectMapper().writeValue(response.getOutputStream(),body );
     }
 }
