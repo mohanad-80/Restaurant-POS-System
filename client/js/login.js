@@ -36,9 +36,22 @@ form.addEventListener("submit", async (e) => {
     setTimeout(() => {
       switch (data.role) {
         case "ADMIN":
+          window.location.href = "./../partials/MenuItem.html";
+          break;
+
+        case "WAITER":
           window.location.href = "./../partials/waiter-view.html";
           break;
-        case "WAITER":
+        case "MANAGER":
+          window.location.href = "./../partials/Inventory.html";
+          break;
+        case "KITCHEN":
+          window.location.href = "./../partials/inventory-list.html";
+          break;
+        case "CASHIER":
+          window.location.href = "./../partials/order-entry.html";
+          break;
+        case "CUSTOMER":
           window.location.href = "./../partials/waiter-view.html";
           break;
         default:
