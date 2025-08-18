@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Inventory Admin</title>
+  <link rel="stylesheet" href="../styles/inventory.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>Inventory</h1>
+    <div class="actions">
+      <a class="btn" href="../partials/Inventory.html">+ New Item</a>
+      <button id="downloadCsv" class="btn outline">Download CSV</button>
+      <label class="btn">
+        Upload CSV
+        <input id="uploadCsv" type="file" accept=".csv" hidden>
+      </label>
+    </div>
+  </header>
+
+  <main class="container">
+    <input id="search" class="search" placeholder="Search…" />
+    <table class="table" id="table">
+      <thead>
+        <tr>
+          <th>Name</th><th>Units</th><th>Unit Type</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </main>
+
+  <script src="../js/inventory-list.js"></script>
+</body>
+</html>
