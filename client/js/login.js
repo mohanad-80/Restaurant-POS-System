@@ -26,12 +26,24 @@ form.addEventListener("submit", async (e) => {
     document.cookie = `token=${data.token}; path=/; max-age=${
       60 * 60 * 24
     }; secure`;
+    document.cookie = `role=${data.role}; path=/; max-age=${
+      60 * 60 * 24
+    }; secure`;
     message.textContent = "Login successful!";
     message.classList.add("success");
 
     // Example: redirect after login
     setTimeout(() => {
-      window.location.href = "dashboard.html";
+      switch (data.role) {
+        case "ADMIN":
+          window.location.href = "./../partials/waiter-view.html";
+          break;
+        case "WAITER":
+          window.location.href = "./../partials/waiter-view.html";
+          break;
+        default:
+          break;
+      }
     }, 1000);
   } catch (err) {
     message.textContent = "Network error";
