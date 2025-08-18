@@ -53,6 +53,7 @@ public class Order {
           CascadeType.REFRESH
   })
   @JoinColumn(name = "table_id")
+  @JsonManagedReference
   private DiningTable table;
 
   @ManyToOne(fetch = FetchType.EAGER)

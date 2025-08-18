@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../assets/images/favicon-32x32.png"
+    />
+    <link rel="stylesheet" href="../styles/order-entry.css" />
+
+    <title>Frontend Mentor | Product list with cart</title>
+
+    <style>
+      .attribution {
+        font-size: 11px;
+        text-align: center;
+      }
+      .attribution a {
+        color: hsl(228, 45%, 44%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-content">
+      <h2>Menu</h2>
+      <div class="products"></div>
+    </div>
+
+    <div class="right-panel">
+      <div class="cart">
+        <h3 class="cart-header">Your Cart (0)</h3>
+        <div class="cart-content"></div>
+        <div class="cart-total-details">
+          <p>Order Total</p>
+          <h3 class="cart-total-price">$0</h3>
+        </div>
+        <div class="order-meta">
+          <label for="tableId">Table ID:</label>
+          <input type="text" id="tableId" placeholder="e.g. T12" />
+
+          <label for="staffId">Staff ID:</label>
+          <input type="text" id="staffId" placeholder="e.g. S05" />
+        </div>
+        <div class="carbon-neutral">
+          <img
+            class="carbon-neutral-icon"
+            src="../assets/images/icon-carbon-neutral.svg"
+            alt="tree icon"
+          />
+          <p class="carbon-neutral-text">
+            This is a <strong>carbon-neutral</strong> delivery
+          </p>
+        </div>
+        <button id="confirm-order-btn" class="confirm-order-btn">
+          Confirm Order
+        </button>
+      </div>
+      <div class="category-filter">
+        <h5>Filter by category:</h5>
+        <div class="filter-chips"></div>
+      </div>
+    </div>
+
+    <div class="attribution">
+      Coded by
+      <a href="https://mohanad-80.github.io/new-portfolio/">Mohanad Ahmed</a>.
+    </div>
+
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <div class="confirmation-msg">
+          <img
+            src="../assets/images/icon-order-confirmed.svg"
+            alt="order confirmed icon"
+          />
+          <h2>Order Confirmed</h2>
+          <p>We hope you enjoy your food!</p>
+        </div>
+        <div class="order-details"></div>
+        <button class="start-new-order-btn">Start New Order</button>
+      </div>
+    </div>
+
+    <script src="../js/order-entry.js"></script>
+  </body>
+</html>

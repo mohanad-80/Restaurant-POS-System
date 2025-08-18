@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Waiter View | Orders</title>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../assets/images/favicon-32x32.png"
+    />
+    <link rel="stylesheet" href="../styles/waiter-view.css" />
+  </head>
+  <body>
+    <header>
+      <h2>Waiter Dashboard</h2>
+    </header>
+
+    <main class="orders-board">
+      <section class="order-panel not-ready">
+        <h3 class="panel-title">Not Ready</h3>
+        <div class="order-items" id="not-ready-items"></div>
+      </section>
+
+      <section class="order-panel ready">
+        <h3 class="panel-title">Ready</h3>
+        <div class="order-items" id="ready-items"></div>
+      </section>
+
+      <section class="order-panel served">
+        <h3 class="panel-title">Served</h3>
+        <div class="order-items" id="served-items"></div>
+      </section>
+    </main>
+
+    <footer>
+      <p>© 2025 Restaurant System</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+    <script src="../js/waiter-view.js"></script>
+  </body>
+</html>
