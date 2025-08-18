@@ -16,6 +16,8 @@ function renderTables(tables) {
   const container = document.getElementById("tables-container");
   container.innerHTML = "";
 
+  tables.sort((a, b) => a.id - b.id);
+
   tables.forEach(table => {
     const badgeClass = statusColors[table.status] || "bg-secondary";
 

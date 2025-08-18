@@ -60,6 +60,7 @@ public class TableController {
     @PutMapping("/{id}")
     public ResponseEntity<TableResponseDto> editTable(@PathVariable Long id, @Valid @RequestBody TableRequestDto requestDto) {
         TableResponseDto response = tableService.updateExistingTable(id, requestDto);
+        notificationService.notifyStatusUpdate(response);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
