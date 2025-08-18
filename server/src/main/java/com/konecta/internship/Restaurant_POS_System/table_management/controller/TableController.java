@@ -2,6 +2,7 @@ package com.konecta.internship.Restaurant_POS_System.table_management.controller
 
 import com.konecta.internship.Restaurant_POS_System.table_management.dto.TableStatusUpdateDto;
 import com.konecta.internship.Restaurant_POS_System.table_management.exception.InvalidStatusException;
+import com.konecta.internship.Restaurant_POS_System.table_management.service.TableNotificationService;
 import com.konecta.internship.Restaurant_POS_System.table_management.service.TableService;
 import com.konecta.internship.Restaurant_POS_System.table_management.dto.ErrorDto;
 import com.konecta.internship.Restaurant_POS_System.table_management.dto.TableRequestDto;
@@ -22,9 +23,11 @@ import java.util.Map;
 @RequestMapping("api/tables")
 public class TableController {
     private final TableService tableService;
+    private final TableNotificationService notificationService;
 
-    public TableController(TableService tableService) {
+    public TableController(TableService tableService, TableNotificationService notificationService) {
         this.tableService = tableService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping
@@ -57,6 +60,7 @@ public class TableController {
     @PutMapping("/{id}")
     public ResponseEntity<TableResponseDto> editTable(@PathVariable Long id, @Valid @RequestBody TableRequestDto requestDto) {
         TableResponseDto response = tableService.updateExistingTable(id, requestDto);
+        notificationService.notifyStatusUpdate(response);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -70,6 +74,7 @@ public class TableController {
     public ResponseEntity<TableResponseDto> editTableStatus(
             @PathVariable Long id, @Valid @RequestBody TableStatusUpdateDto statusDto) {
         TableResponseDto response = tableService.updateTableStatus(id, statusDto);
+        notificationService.notifyStatusUpdate(response);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

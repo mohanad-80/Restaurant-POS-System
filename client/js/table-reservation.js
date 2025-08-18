@@ -16,6 +16,8 @@ function renderTables(tables) {
   const container = document.getElementById("tables-container");
   container.innerHTML = "";
 
+  tables.sort((a, b) => a.id - b.id);
+
   tables.forEach(table => {
     const badgeClass = statusColors[table.status] || "bg-secondary";
 
@@ -205,5 +207,23 @@ document.getElementById("statusFilter").addEventListener("change", e => {
   fetchTables(e.target.value);
 });
 
+// ========== WebSocket Setup ==========
+function connectSocket() {
+  const socket = new SockJS("http://localhost:8080/ws");
+  const stompClient = Stomp.over(socket);
+
+  stompClient.connect({}, () => {
+    console.log("Connected to websocket");
+
+    // Subscribe to table updates
+    stompClient.subscribe("/topic/tables", (message) => {
+      fetchTables(document.getElementById("statusFilter").value);
+    });
+  });
+}
+
+
+
 // Initial load
 fetchTables();
+connectSocket();
