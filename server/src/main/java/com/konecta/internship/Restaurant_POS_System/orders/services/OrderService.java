@@ -32,18 +32,21 @@ public class OrderService {
   private final MenuItemService menuItemService;
   private final TableRepository diningTableRepository;
   private final UserRepository userRepository;
+  private final OrderNotificationService notificationService;
 
   public OrderService(
       OrderRepository orderRepository,
       OrderItemRepository orderItemRepository,
       MenuItemService menuItemService,
       TableRepository diningTableRepository,
-      UserRepository userRepository) {
+      UserRepository userRepository,
+      OrderNotificationService notificationService) {
     this.orderRepository = orderRepository;
     this.orderItemRepository = orderItemRepository;
     this.menuItemService = menuItemService;
     this.diningTableRepository = diningTableRepository;
     this.userRepository = userRepository;
+    this.notificationService = notificationService;
   }
 
   public List<Order> getAllOrders() {
@@ -84,7 +87,9 @@ public class OrderService {
     order.setDiscount(BigDecimal.ZERO);
     order.setTaxAmount(calculateTax(total));
 
-    return orderRepository.save(order);
+    Order saved = orderRepository.save(order);
+    notificationService.notifyOrder(saved);
+    return saved;
   }
 
   private OrderItem buildOrderItemFromDTO(OrderItemDTO dto, Order order) {
@@ -121,11 +126,15 @@ public class OrderService {
       order.setStatus(dto.getStatus());
     }
 
-    return orderRepository.save(order);
+    Order saved = orderRepository.save(order);
+    notificationService.notifyOrder(saved);
+    return saved;
   }
 
   public void deleteOrderById(Long id) {
+    Order order = getOrderById(id);
     orderRepository.deleteById(id);
+    notificationService.notifyOrder(order);
   }
 
   public Order addOrderItemToOrder(Long id, OrderItemDTO dto) {
@@ -141,7 +150,9 @@ public class OrderService {
     order.setTotalAmount(total);
     order.setTaxAmount(calculateTax(total));
 
-    return orderRepository.save(order);
+    Order saved = orderRepository.save(order);
+    notificationService.notifyOrder(saved);
+    return saved;
   }
 
   public OrderItem updateOrderItem(Long id, UpdateOrderItemDTO dto) {
@@ -149,10 +160,11 @@ public class OrderService {
         .orElseThrow(() -> new OrderItemNotFoundException(
             "Order item with ID " + id + " not found."));
 
-    // Case 1: quantity change (with or without notes)
+    boolean updated = false;
+
+    // Case 1: quantity change (recalculate order totals)
     if (dto.getQuantity() != null) {
       item.setQuantity(dto.getQuantity());
-
       BigDecimal unitPrice = item.getUnitPrice();
       item.setTotalPrice(unitPrice.multiply(BigDecimal.valueOf(dto.getQuantity())));
 
@@ -163,19 +175,30 @@ public class OrderService {
 
       order.setTotalAmount(newOrderTotal);
       order.setTaxAmount(calculateTax(newOrderTotal));
-
-      if (dto.getNotes() != null) {
-        item.setNotes(dto.getNotes());
-      }
-
       orderRepository.save(order);
-    } else if (dto.getNotes() != null) {
-      // Case 2: only notes changed
-      item.setNotes(dto.getNotes());
-      orderItemRepository.save(item);
+
+      updated = true;
     }
 
-    return item;
+    // Case 2: notes change
+    if (dto.getNotes() != null) {
+      item.setNotes(dto.getNotes());
+      updated = true;
+    }
+
+    // Case 3: status change
+    if (dto.getStatus() != null) {
+      item.setStatus(dto.getStatus());
+      updated = true;
+    }
+
+    if (updated) {
+      OrderItem saved = orderItemRepository.save(item);
+      notificationService.notifyOrderItem(saved);
+      return saved;
+    }
+
+    return item; // no changes
   }
 
   public void deleteOrderItem(Long itemId) {
@@ -198,5 +221,6 @@ public class OrderService {
     orderItemRepository.delete(item);
 
     orderRepository.save(order);
+    notificationService.notifyOrder(order);
   }
 }

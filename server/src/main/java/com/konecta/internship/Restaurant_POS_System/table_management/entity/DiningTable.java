@@ -1,5 +1,6 @@
 package com.konecta.internship.Restaurant_POS_System.table_management.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.konecta.internship.Restaurant_POS_System.orders.entity.Order;
 import com.konecta.internship.Restaurant_POS_System.table_management.enums.TableStatus;
 import jakarta.persistence.*;
@@ -31,5 +32,6 @@ public class DiningTable {
     private TableStatus status = TableStatus.AVAILABLE;
 
     @OneToMany(mappedBy = "table", orphanRemoval = true)
+    @JsonBackReference
     private Set<Order> orders;
 }
