@@ -36,7 +36,7 @@ public class InventoryEntity
 
     private String unit;
 
-    /*@ManyToMany(mappedBy = "ingredients")
-    private List<MenuItemEntity> menuItems;*/
+    @ManyToMany(mappedBy = "ingredients")
+    private List<MenuItemEntity> menuItems;
 
 }
